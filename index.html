@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Everest Poker Room Portal</title>
+  <title>Everest Poker Room</title>
 
   <style>
     * {
@@ -13,94 +13,909 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
       background: #070707;
       color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
     }
 
-    .card {
+    a {
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(255, 215, 120, 0.16), transparent 32%),
+        radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.08), transparent 26%),
+        linear-gradient(180deg, #080808 0%, #050505 100%);
+    }
+
+    .container {
       width: 100%;
-      max-width: 430px;
-      background: #121212;
-      border: 1px solid #2a2a2a;
-      border-radius: 24px;
-      padding: 30px;
-      text-align: center;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 28px 20px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 0 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
     .logo {
-      width: 160px;
-      max-width: 65%;
+      width: 72px;
+      height: auto;
       display: block;
-      margin: 0 auto 18px;
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+    .brand-text span {
+      display: block;
+      margin-top: 4px;
+      color: #a3a3a3;
+      font-size: 12px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid #2a2a2a;
+      border-radius: 999px;
+      background: rgba(18,18,18,0.9);
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: #a3a3a3;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: #facc15;
+      color: #111111;
+    }
+
+    .member-btn-small {
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #111111;
+      font-weight: 900;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 36px;
+      align-items: center;
+      padding: 42px 0 36px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(250, 204, 21, 0.45);
+      color: #facc15;
+      background: rgba(250, 204, 21, 0.08);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 18px;
     }
 
     h1 {
       margin: 0;
-      font-size: 24px;
-      letter-spacing: 1px;
+      font-size: 56px;
+      line-height: 1.05;
+      letter-spacing: -1.2px;
     }
 
-    p {
-      color: #a3a3a3;
-      font-size: 14px;
-      line-height: 1.6;
-      margin: 10px 0 24px;
+    .gold {
+      color: #facc15;
     }
 
-    a {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      margin-top: 12px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 15px;
+    .hero-text {
+      color: #c7c7c7;
+      font-size: 17px;
+      line-height: 1.75;
+      margin: 20px 0 28px;
+      max-width: 620px;
     }
 
-    .member {
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .primary-btn {
+      display: inline-block;
+      padding: 16px 24px;
+      border-radius: 16px;
       background: #ffffff;
+      color: #111111;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: 0 12px 30px rgba(255,255,255,0.08);
+    }
+
+    .secondary-note {
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .showcase {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+      border: 1px solid rgba(250, 204, 21, 0.25);
+      border-radius: 30px;
+      padding: 24px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .showcase::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(250, 204, 21, 0.12);
+      top: -90px;
+      right: -90px;
+      filter: blur(8px);
+    }
+
+    .showcase::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent, rgba(255,255,255,0.08), transparent);
+      pointer-events: none;
+    }
+
+    .membership-card {
+      position: relative;
+      z-index: 1;
+      border-radius: 26px;
+      min-height: 255px;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.26);
+      box-shadow:
+        inset 0 0 34px rgba(255,255,255,0.08),
+        0 22px 50px rgba(0,0,0,0.5);
+      overflow: hidden;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .membership-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .membership-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        linear-gradient(120deg, transparent 35%, rgba(255,255,255,0.28), transparent 65%);
+      transform: rotate(12deg);
+      opacity: 0.4;
+    }
+
+    .membership-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,0.35), transparent 16%),
+        radial-gradient(circle at 82% 20%, rgba(255,255,255,0.16), transparent 18%),
+        linear-gradient(180deg, transparent, rgba(0,0,0,0.28));
+      pointer-events: none;
+    }
+
+    .card-silver {
+      background:
+        linear-gradient(135deg, #f5f5f4 0%, #9ca3af 36%, #525252 72%, #111111 100%);
+    }
+
+    .card-gold {
+      background:
+        linear-gradient(135deg, #fde68a 0%, #d97706 36%, #7c2d12 74%, #111111 100%);
+    }
+
+    .card-diamond {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.98), rgba(103,232,249,0.85), rgba(129,140,248,0.35), #111111),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.22) 0 12px, rgba(255,255,255,0.02) 12px 24px);
+    }
+
+    .card-sky {
+      background:
+        linear-gradient(135deg, #7dd3fc 0%, #38bdf8 38%, #075985 74%, #020617 100%);
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      min-height: 207px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-logo-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-logo-text {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.88);
+      font-weight: 900;
+    }
+
+    .card-silver .card-logo-text,
+    .card-diamond .card-logo-text {
+      color: rgba(20,20,20,0.72);
+    }
+
+    .card-title {
+      margin-top: 44px;
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.35);
+    }
+
+    .card-silver .card-title,
+    .card-diamond .card-title {
+      color: #111111;
+      text-shadow: 0 2px 20px rgba(255,255,255,0.2);
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+    }
+
+    .card-bottom small {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .card-silver .card-bottom small,
+    .card-diamond .card-bottom small {
+      color: rgba(20,20,20,0.58);
+    }
+
+    .card-bottom strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    .card-silver .card-bottom strong,
+    .card-diamond .card-bottom strong {
       color: #111111;
     }
 
-    .staff {
-      background: #262626;
+    .tier-pill {
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: #facc15;
+      color: #111111;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .tier-selector {
+      position: relative;
+      z-index: 2;
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .tier-btn {
+      min-height: 68px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
       color: #ffffff;
-      border: 1px solid #444;
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform 0.2s ease, border 0.2s ease, box-shadow 0.2s ease;
+      padding: 10px;
+    }
+
+    .tier-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .tier-btn.active {
+      border: 2px solid #facc15;
+      box-shadow: 0 0 22px rgba(250,204,21,0.22);
+    }
+
+    .tier-btn small {
+      display: block;
+      margin-top: 4px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.72);
+      font-size: 11px;
+    }
+
+    .btn-silver { background: linear-gradient(135deg, #cfcfcf, #303030); }
+    .btn-gold { background: linear-gradient(135deg, #fbbf24, #422006); }
+    .btn-diamond { background: linear-gradient(135deg, #e0f2fe, #0f172a); }
+    .btn-sky { background: linear-gradient(135deg, #38bdf8, #082f49); }
+
+    .section {
+      padding: 34px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .section-title p {
+      margin: 10px auto 0;
+      max-width: 650px;
+      color: #a3a3a3;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .feature {
+      background: #121212;
+      border: 1px solid #2a2a2a;
+      border-radius: 20px;
+      padding: 18px;
+      min-height: 140px;
+    }
+
+    .feature .icon {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .feature h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: #9ca3af;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .location-card {
+      background: linear-gradient(135deg, #121212, #080808);
+      border: 1px solid #2a2a2a;
+      border-radius: 24px;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .location-card h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+
+    .location-card p {
+      margin: 0;
+      color: #a3a3a3;
+      line-height: 1.7;
     }
 
     .footer {
-      margin-top: 18px;
+      border-top: 1px solid #242424;
+      margin-top: 34px;
+      padding: 22px 0 8px;
+      text-align: center;
       color: #666;
       font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 24px;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .features {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .location-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .brand-text strong {
+        font-size: 15px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .hero-text {
+        font-size: 15px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .tier-selector {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .membership-card {
+        min-height: 235px;
+      }
+
+      .card-title {
+        font-size: 30px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <img
-      class="logo"
-      src="https://raw.githubusercontent.com/joywei43/everest-member-registration/main/logo.png"
-      alt="Everest Poker Room Logo"
-    />
+  <div class="page">
+    <div class="container">
 
-    <h1>EVEREST POKER ROOM</h1>
-    <p>Player Points System Portal</p>
+      <header class="header">
+        <div class="brand">
+          <img
+            class="logo"
+            src="https://raw.githubusercontent.com/joywei43/everest-member-registration/main/logo.png"
+            alt="Everest Poker Room Logo"
+          />
+          <div class="brand-text">
+            <strong>EVEREST POKER ROOM</strong>
+            <span data-i18n="brandSub">In Midori Casino</span>
+          </div>
+        </div>
 
-    <a class="member" href="./member.html">Player Member Page</a>
-    <a class="staff" href="./staff.html">Staff Panel</a>
+        <div class="header-actions">
+          <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLanguage('en')" id="lang-en">EN</button>
+            <button class="lang-btn" onclick="setLanguage('zh')" id="lang-zh">中文</button>
+            <button class="lang-btn" onclick="setLanguage('ja')" id="lang-ja">JP</button>
+            <button class="lang-btn" onclick="setLanguage('ko')" id="lang-ko">KR</button>
+          </div>
 
-    <div class="footer">
-      For Everest Poker Room members and authorized staff only.
+          <a class="member-btn-small" href="./member.html" data-i18n="memberLogin">Member Login</a>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div>
+            <div class="tag" data-i18n="tagline">Premium Poker Experience in Clark, Philippines</div>
+
+            <h1>
+              <span data-i18n="heroLine1">Play Higher.</span><br />
+              <span data-i18n="heroLine2">Earn More.</span><br />
+              <span class="gold" data-i18n="heroLine3">Join Everest.</span>
+            </h1>
+
+            <p class="hero-text" data-i18n="heroText">
+              Welcome to Everest Poker Room, a professional poker destination inside Midori Casino.
+              Enjoy exciting cash games, member rewards, redemption benefits, and dedicated support
+              for both local players and overseas poker travelers.
+            </p>
+
+            <div class="cta-row">
+              <a class="primary-btn" href="./member.html" data-i18n="memberLogin">Member Login</a>
+              <span class="secondary-note" data-i18n="memberNote">Check your points, card tier, and recent transactions.</span>
+            </div>
+          </div>
+
+          <div class="showcase">
+            <div id="mainCard" class="membership-card card-sky">
+              <div class="card-content">
+                <div class="card-logo-line">
+                  <div class="card-logo-text">EVEREST POKER ROOM</div>
+                  <div>♠</div>
+                </div>
+
+                <div>
+                  <div id="cardTitle" class="card-title">Sky Blue</div>
+                </div>
+
+                <div class="card-bottom">
+                  <div>
+                    <small data-i18n="memberCard">MEMBER CARD</small>
+                    <strong id="cardDescription">Overseas Player</strong>
+                  </div>
+                  <span id="cardBadge" class="tier-pill">OVERSEAS</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tier-selector">
+              <button class="tier-btn btn-silver" onclick="selectTier('silver')" id="tier-silver">
+                Silver
+                <small data-i18n="localTier">Local Tier</small>
+              </button>
+              <button class="tier-btn btn-gold" onclick="selectTier('gold')" id="tier-gold">
+                Gold
+                <small data-i18n="localTier">Local Tier</small>
+              </button>
+              <button class="tier-btn btn-diamond" onclick="selectTier('diamond')" id="tier-diamond">
+                Diamond
+                <small data-i18n="localTier">Local Tier</small>
+              </button>
+              <button class="tier-btn btn-sky active" onclick="selectTier('sky')" id="tier-sky">
+                Sky Blue
+                <small data-i18n="overseasTier">Overseas Tier</small>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-title">
+            <h2 data-i18n="benefitsTitle">Member Card Benefits</h2>
+            <p data-i18n="benefitsText">
+              Everest Poker Room membership cards are designed to reward active players with better
+              access to exclusive perks, redemption options, and player services.
+            </p>
+          </div>
+
+          <div class="features">
+            <div class="feature">
+              <div class="icon">♠</div>
+              <h3 data-i18n="feature1Title">Cash Games</h3>
+              <p data-i18n="feature1Text">Professional poker tables with a comfortable and player-focused environment.</p>
+            </div>
+
+            <div class="feature">
+              <div class="icon">★</div>
+              <h3 data-i18n="feature2Title">Member Rewards</h3>
+              <p data-i18n="feature2Text">Track your points, card tier, and eligible member benefits through the member system.</p>
+            </div>
+
+            <div class="feature">
+              <div class="icon">☕</div>
+              <h3 data-i18n="feature3Title">F&amp;B Redemption</h3>
+              <p data-i18n="feature3Text">Use member points for selected food and beverage redemption options when available.</p>
+            </div>
+
+            <div class="feature">
+              <div class="icon">✈</div>
+              <h3 data-i18n="feature4Title">Overseas Support</h3>
+              <p data-i18n="feature4Text">Support for international poker travelers, including basic travel and player assistance.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="location-card">
+            <div>
+              <h2 data-i18n="locationTitle">Location</h2>
+              <p data-i18n="locationText">
+                Everest Poker Room is located inside Midori Clark Hotel and Casino,
+                offering players a convenient poker destination in Clark, Philippines.
+              </p>
+            </div>
+
+            <a class="primary-btn" href="./member.html" data-i18n="accessMember">Access Member Page</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer" data-i18n="footer">
+        © Everest Poker Room. All member perks are subject to availability and review of gaming records.
+      </footer>
+
     </div>
   </div>
+
+  <script>
+    const translations = {
+      en: {
+        brandSub: "In Midori Casino",
+        memberLogin: "Member Login",
+        tagline: "Premium Poker Experience in Clark, Philippines",
+        heroLine1: "Play Higher.",
+        heroLine2: "Earn More.",
+        heroLine3: "Join Everest.",
+        heroText: "Welcome to Everest Poker Room, a professional poker destination inside Midori Casino. Enjoy exciting cash games, member rewards, redemption benefits, and dedicated support for both local players and overseas poker travelers.",
+        memberNote: "Check your points, card tier, and recent transactions.",
+        memberCard: "MEMBER CARD",
+        localTier: "Local Tier",
+        overseasTier: "Overseas Tier",
+        benefitsTitle: "Member Card Benefits",
+        benefitsText: "Everest Poker Room membership cards are designed to reward active players with better access to exclusive perks, redemption options, and player services.",
+        feature1Title: "Cash Games",
+        feature1Text: "Professional poker tables with a comfortable and player-focused environment.",
+        feature2Title: "Member Rewards",
+        feature2Text: "Track your points, card tier, and eligible member benefits through the member system.",
+        feature3Title: "F&B Redemption",
+        feature3Text: "Use member points for selected food and beverage redemption options when available.",
+        feature4Title: "Overseas Support",
+        feature4Text: "Support for international poker travelers, including basic travel and player assistance.",
+        locationTitle: "Location",
+        locationText: "Everest Poker Room is located inside Midori Clark Hotel and Casino, offering players a convenient poker destination in Clark, Philippines.",
+        accessMember: "Access Member Page",
+        footer: "© Everest Poker Room. All member perks are subject to availability and review of gaming records.",
+        cardDescriptions: {
+          silver: "Entry Local Member",
+          gold: "Enhanced Local Member",
+          diamond: "Premium Local Member",
+          sky: "Overseas Player"
+        },
+        cardBadges: {
+          silver: "LOCAL",
+          gold: "LOCAL",
+          diamond: "LOCAL",
+          sky: "OVERSEAS"
+        }
+      },
+
+      zh: {
+        brandSub: "位於 Midori Casino",
+        memberLogin: "會員登入",
+        tagline: "菲律賓克拉克高質感撲克體驗",
+        heroLine1: "打得更高。",
+        heroLine2: "回饋更多。",
+        heroLine3: "加入 Everest。",
+        heroText: "歡迎來到 Everest Poker Room，位於 Midori Casino 的專業撲克空間。我們提供現金桌、會員回饋、點數兌換，以及針對本地與海外玩家的專屬服務支援。",
+        memberNote: "查詢你的點數、卡級與近期交易紀錄。",
+        memberCard: "會員卡",
+        localTier: "本地會員",
+        overseasTier: "海外會員",
+        benefitsTitle: "會員卡禮遇",
+        benefitsText: "Everest Poker Room 會員卡專為活躍玩家設計，提供更完整的專屬回饋、點數兌換與玩家服務。",
+        feature1Title: "現金桌",
+        feature1Text: "舒適、專業並以玩家體驗為核心的撲克環境。",
+        feature2Title: "會員回饋",
+        feature2Text: "透過會員系統查詢點數、卡級與可享有的會員禮遇。",
+        feature3Title: "餐飲兌換",
+        feature3Text: "可依現場供應情況，使用會員點數兌換指定餐飲項目。",
+        feature4Title: "海外支援",
+        feature4Text: "為海外撲克旅客提供基礎旅遊與玩家服務協助。",
+        locationTitle: "地點",
+        locationText: "Everest Poker Room 位於 Midori Clark Hotel and Casino，為玩家提供菲律賓克拉克便利的撲克目的地。",
+        accessMember: "進入會員頁",
+        footer: "© Everest Poker Room。所有會員禮遇皆依供應情況與遊戲紀錄審核為準。",
+        cardDescriptions: {
+          silver: "入門本地會員",
+          gold: "進階本地會員",
+          diamond: "高階本地會員",
+          sky: "海外玩家會員"
+        },
+        cardBadges: {
+          silver: "本地",
+          gold: "本地",
+          diamond: "本地",
+          sky: "海外"
+        }
+      },
+
+      ja: {
+        brandSub: "Midori Casino 内",
+        memberLogin: "メンバーログイン",
+        tagline: "フィリピン・クラークのプレミアムポーカー体験",
+        heroLine1: "より高く挑戦。",
+        heroLine2: "より多く獲得。",
+        heroLine3: "Everestへ。",
+        heroText: "Everest Poker Roomは、Midori Casino内にある本格的なポーカールームです。キャッシュゲーム、会員リワード、ポイント交換、そしてローカル・海外プレイヤー向けのサポートをご提供します。",
+        memberNote: "ポイント、カードランク、最近の取引履歴を確認できます。",
+        memberCard: "メンバーカード",
+        localTier: "ローカル会員",
+        overseasTier: "海外会員",
+        benefitsTitle: "メンバーカード特典",
+        benefitsText: "Everest Poker Roomのメンバーカードは、アクティブなプレイヤーに向けて、限定特典、ポイント交換、プレイヤーサービスを提供するために設計されています。",
+        feature1Title: "キャッシュゲーム",
+        feature1Text: "快適でプレイヤー重視のプロフェッショナルなポーカー環境。",
+        feature2Title: "会員リワード",
+        feature2Text: "会員システムでポイント、カードランク、対象特典を確認できます。",
+        feature3Title: "飲食交換",
+        feature3Text: "提供状況に応じて、会員ポイントを指定の飲食アイテムと交換できます。",
+        feature4Title: "海外プレイヤーサポート",
+        feature4Text: "海外からのポーカー旅行者向けに、基本的な旅行・プレイヤーサポートを提供します。",
+        locationTitle: "所在地",
+        locationText: "Everest Poker Roomは、Midori Clark Hotel and Casino内にあり、フィリピン・クラークで便利なポーカー体験を提供します。",
+        accessMember: "メンバーページへ",
+        footer: "© Everest Poker Room。すべての会員特典は提供状況およびプレイ記録の確認に基づきます。",
+        cardDescriptions: {
+          silver: "ローカル入門会員",
+          gold: "ローカル上位会員",
+          diamond: "ローカルプレミアム会員",
+          sky: "海外プレイヤー会員"
+        },
+        cardBadges: {
+          silver: "LOCAL",
+          gold: "LOCAL",
+          diamond: "LOCAL",
+          sky: "OVERSEAS"
+        }
+      },
+
+      ko: {
+        brandSub: "Midori Casino 내 위치",
+        memberLogin: "회원 로그인",
+        tagline: "필리핀 클락의 프리미엄 포커 경험",
+        heroLine1: "더 높게 플레이하고.",
+        heroLine2: "더 많이 적립하고.",
+        heroLine3: "Everest에 합류하세요.",
+        heroText: "Everest Poker Room은 Midori Casino 내에 위치한 전문 포커룸입니다. 캐시게임, 회원 리워드, 포인트 사용 혜택, 현지 및 해외 포커 플레이어를 위한 전용 지원을 제공합니다.",
+        memberNote: "포인트, 카드 등급, 최근 거래 내역을 확인하세요.",
+        memberCard: "회원 카드",
+        localTier: "로컬 회원",
+        overseasTier: "해외 회원",
+        benefitsTitle: "회원 카드 혜택",
+        benefitsText: "Everest Poker Room 회원 카드는 활발히 플레이하는 고객에게 전용 혜택, 포인트 사용 옵션 및 플레이어 서비스를 제공하기 위해 설계되었습니다.",
+        feature1Title: "캐시게임",
+        feature1Text: "편안하고 플레이어 중심의 전문 포커 환경을 제공합니다.",
+        feature2Title: "회원 리워드",
+        feature2Text: "회원 시스템을 통해 포인트, 카드 등급 및 이용 가능한 혜택을 확인할 수 있습니다.",
+        feature3Title: "F&B 사용",
+        feature3Text: "이용 가능 여부에 따라 회원 포인트를 지정된 식음료 항목으로 사용할 수 있습니다.",
+        feature4Title: "해외 플레이어 지원",
+        feature4Text: "해외 포커 여행객을 위한 기본 여행 및 플레이어 지원을 제공합니다.",
+        locationTitle: "위치",
+        locationText: "Everest Poker Room은 Midori Clark Hotel and Casino 내에 위치해 있으며, 필리핀 클락에서 편리한 포커 목적지를 제공합니다.",
+        accessMember: "회원 페이지 접속",
+        footer: "© Everest Poker Room. 모든 회원 혜택은 이용 가능 여부 및 게임 기록 검토에 따라 제공됩니다.",
+        cardDescriptions: {
+          silver: "로컬 기본 회원",
+          gold: "로컬 상위 회원",
+          diamond: "로컬 프리미엄 회원",
+          sky: "해외 플레이어 회원"
+        },
+        cardBadges: {
+          silver: "LOCAL",
+          gold: "LOCAL",
+          diamond: "LOCAL",
+          sky: "OVERSEAS"
+        }
+      }
+    };
+
+    const tiers = {
+      silver: {
+        title: "Silver",
+        className: "card-silver"
+      },
+      gold: {
+        title: "Gold",
+        className: "card-gold"
+      },
+      diamond: {
+        title: "Diamond",
+        className: "card-diamond"
+      },
+      sky: {
+        title: "Sky Blue",
+        className: "card-sky"
+      }
+    };
+
+    let currentLang = "en";
+    let currentTier = "sky";
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      const dict = translations[lang];
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) {
+          el.innerHTML = dict[key];
+        }
+      });
+
+      document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
+      document.getElementById("lang-" + lang).classList.add("active");
+
+      updateTierText();
+    }
+
+    function selectTier(tier) {
+      currentTier = tier;
+
+      const mainCard = document.getElementById("mainCard");
+      mainCard.className = "membership-card " + tiers[tier].className;
+
+      document.getElementById("cardTitle").innerText = tiers[tier].title;
+
+      document.querySelectorAll(".tier-btn").forEach(btn => btn.classList.remove("active"));
+      document.getElementById("tier-" + tier).classList.add("active");
+
+      updateTierText();
+    }
+
+    function updateTierText() {
+      const dict = translations[currentLang];
+      document.getElementById("cardDescription").innerText = dict.cardDescriptions[currentTier];
+      document.getElementById("cardBadge").innerText = dict.cardBadges[currentTier];
+    }
+
+    setLanguage("en");
+    selectTier("sky");
+  </script>
 </body>
 </html>
