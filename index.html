@@ -1,1 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Everest Poker Room Portal</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #070707;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: #121212;
+      border: 1px solid #2a2a2a;
+      border-radius: 24px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    }
+
+    .logo {
+      width: 160px;
+      max-width: 65%;
+      display: block;
+      margin: 0 auto 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    p {
+      color: #a3a3a3;
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 10px 0 24px;
+    }
+
+    a {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin-top: 12px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .member {
+      background: #ffffff;
+      color: #111111;
+    }
+
+    .staff {
+      background: #262626;
+      color: #ffffff;
+      border: 1px solid #444;
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: #666;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <img
+      class="logo"
+      src="https://raw.githubusercontent.com/joywei43/everest-member-registration/main/logo.png"
+      alt="Everest Poker Room Logo"
+    />
+
+    <h1>EVEREST POKER ROOM</h1>
+    <p>Player Points System Portal</p>
+
+    <a class="member" href="./member.html">Player Member Page</a>
+    <a class="staff" href="./staff.html">Staff Panel</a>
+
+    <div class="footer">
+      For Everest Poker Room members and authorized staff only.
+    </div>
+  </div>
+</body>
+</html>
