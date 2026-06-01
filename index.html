@@ -982,20 +982,59 @@
     let currentLang = "en";
     let currentTier = "sky";
 
-    function setLanguage(lang) {
-      currentLang = lang;
-      const dict = translations[lang];
+function setLanguage(lang, saveChoice = true) {
+  currentLang = lang;
 
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.getAttribute("data-i18n");
-        if (dict[key]) {
-          el.innerHTML = dict[key];
-        }
-      });
+  if (saveChoice) {
+    localStorage.setItem("everest_lang", lang);
+  }
 
-      document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
-      document.getElementById("lang-" + lang).classList.add("active");
+  const dict = translations[lang] || translations.en;
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key]) {
+      el.innerHTML = dict[key];
     }
+  });
+
+  document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
+
+  const langBtn = document.getElementById("lang-" + lang);
+  if (langBtn) {
+    langBtn.classList.add("active");
+  }
+}
+    async function detectLanguageByIP() {
+  const savedLang = localStorage.getItem("everest_lang");
+
+  if (savedLang && translations[savedLang]) {
+    setLanguage(savedLang, false);
+    return;
+  }
+
+  try {
+    const response = await fetch("https://ipapi.co/json/");
+    const data = await response.json();
+    const country = data.country_code;
+
+    let detectedLang = "en";
+
+    if (country === "JP") {
+      detectedLang = "ja";
+    } else if (country === "KR") {
+      detectedLang = "ko";
+    } else if (["SG", "MY", "TW", "HK", "MO", "CN"].includes(country)) {
+      detectedLang = "zh";
+    } else {
+      detectedLang = "en";
+    }
+
+    setLanguage(detectedLang, false);
+  } catch (error) {
+    setLanguage("en", false);
+  }
+}
 
     function selectTier(tier) {
       currentTier = tier;
@@ -1010,8 +1049,8 @@
       document.getElementById("tier-" + tier).classList.add("active");
     }
 
-    setLanguage("en");
-    selectTier("sky");
+detectLanguageByIP();
+selectTier("sky");
   </script>
 </body>
 </html>
