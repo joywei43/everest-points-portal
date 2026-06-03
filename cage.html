@@ -81,7 +81,10 @@ input,select,textarea{width:100%;background:var(--input);border:1px solid rgba(2
 </div>
 <div class="print-area"><div class="print-report" id="printReport"></div></div>
 <script>
-const CONFIG={API_URL:"https://script.google.com/macros/s/AKfycbwr5uYjgfcfcHecsngGZHHpepxK_M_Vy-ya1PhdQOpOuD996I8KDADrkdYSmUu6oqL_/exec",APP_TOKEN:"EVEREST_CAGE_2026_PRIVATE"};
+const CONFIG = {
+  API_URL: "https://script.google.com/macros/s/AKfycby9N-3K9Lppr1BFg_hNQTdv2etzrJ2jOBWdZBMdX1XomEDEdHHPGBZrdg4BX6HXLib80A/exec",
+  APP_TOKEN: "EVEREST_CAGE_2026_PRIVATE"
+};
 const TYPE_DIRECTION={"Buy In":"IN","Points Top Up":"IN","Merchandise Purchase":"IN","Table Rake Box Deposit":"IN","Withdrawal from Midori Cage":"IN","Agent Deposit":"IN","Return Chip":"OUT","Voucher Redeem":"OUT","Deposit to Midori Cage":"OUT","Agent Withdrawal":"OUT"};
 const state={staff:null,password:"",shift:null,latestSummary:{totalCashIn:0,totalCashOut:0,netMovement:0,transactionCount:0}};
 function money(n){return "₱"+(Number(n||0)).toLocaleString("en-US",{maximumFractionDigits:2});}function val(id){return document.getElementById(id).value;}function setText(id,v){document.getElementById(id).textContent=v;}function setValue(id,v){document.getElementById(id).value=v;}function setMsg(id,text,ok=true){const el=document.getElementById(id);el.className="msg "+(ok?"ok":"err");el.textContent=text;}function clearMsg(id){const el=document.getElementById(id);el.className="msg";el.textContent="";}function getMemberCode(){const raw=val("memberId").trim();return raw?"EPR-"+raw.padStart(5,"0"):"";}
