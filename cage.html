@@ -487,25 +487,32 @@ button{
               <input id="transactionIdPreview" value="Auto generated after Submit" readonly />
             </div>
 
-            <div>
-              <label>Member Code</label>
-              <div style="display:flex; gap:8px;">
-                <input 
-                  value="EPR-" 
-                  readonly 
-                  style="width:90px; text-align:center; color:#f5d77f; font-weight:800;" 
-                />
-                <input 
-                  id="memberId" 
-                  placeholder="00001" 
-                  maxlength="5"
-                  oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,5);"
-                  onblur="lookupMember()" 
-                  onkeydown="if(event.key==='Enter'){lookupMember();}" 
-                />
-              </div>
-              <div class="hint">Input last 5 digits only. Example: 00001</div>
-            </div>
+<div>
+  <label>Member Code</label>
+  <div style="display:flex; gap:8px;">
+    <input 
+      value="EPR-" 
+      readonly 
+      style="width:90px; text-align:center; color:#f5d77f; font-weight:800;" 
+    />
+    <input 
+      id="memberId" 
+      placeholder="00001" 
+      maxlength="5"
+      oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,5);"
+      onkeydown="if(event.key==='Enter'){lookupMember();}" 
+    />
+    <button 
+      type="button" 
+      class="secondary" 
+      onclick="lookupMember()" 
+      style="padding:12px 16px; white-space:nowrap;"
+    >
+      Search
+    </button>
+  </div>
+  <div class="hint">Input last 5 digits only. Example: 00001</div>
+</div>
 
             <div>
               <label>Player Name</label>
