@@ -794,9 +794,13 @@ function getFullMemberCode() {
 async function lookupMember(){
   const memberCode = getFullMemberCode();
 
-  if (!memberCode) return;
+  if (!memberCode) {
+    setMsg("txnMsg", "Please input Member Code.", false);
+    return;
+  }
 
   clearMsg("txnMsg");
+  setMsg("txnMsg", "Searching member: " + memberCode + "...", true);
 
   try{
     const res = await api("getMember", auth({ memberId: memberCode }));
@@ -808,13 +812,15 @@ async function lookupMember(){
     setText("kycStatus", m.kycStatus || "-");
     setText("currentPoints", m.currentPoints || "-");
 
+    setMsg("txnMsg", "Member loaded: " + memberCode, true);
+
   }catch(err){
     setText("tier", "-");
     setText("nationality", "-");
     setText("kycStatus", "-");
     setText("currentPoints", "-");
     document.getElementById("playerName").value = "";
-    setMsg("txnMsg", "Member lookup: " + err.message, false);
+    setMsg("txnMsg", "Member lookup failed: " + err.message, false);
   }
 }
 
