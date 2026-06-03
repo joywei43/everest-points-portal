@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Everest Poker Room | Cage System</title>
+<style>
+:root{
+  --bg:#06100c;--panel:#0d1c15;--gold:#d7b35a;--gold2:#f5d77f;--muted:#9cafaa;
+  --line:rgba(215,179,90,.25);--white:#f6f1e5;--input:#07130e;--green:#21a86b;--danger:#b94e4e;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 85% 5%,rgba(33,168,107,.18),transparent 35%),radial-gradient(circle at 10% 0%,rgba(215,179,90,.13),transparent 32%),linear-gradient(180deg,#07120e,#030806);color:var(--white);font-family:Inter,Arial,sans-serif}
+.app{display:flex;min-height:100vh}
+aside{width:278px;background:linear-gradient(180deg,#08150f,#040a07);border-right:1px solid var(--line);padding:24px 20px}
+.brand{display:flex;gap:13px;align-items:center;margin-bottom:24px}
+.logo{width:48px;height:48px;border-radius:50%;border:1px solid var(--gold);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 0 22px rgba(215,179,90,.16)}
+.brand h1{font-size:16px;line-height:1.12;margin:0;letter-spacing:.09em}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:4px;letter-spacing:.16em}
+.login-card,.note-box{border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);border-radius:16px;padding:14px;margin-bottom:18px}
+.staff-name{font-size:15px;font-weight:800;color:var(--gold2)}.role{font-size:12px;color:#b9c7c0;margin-top:4px;line-height:1.55}
+nav a{display:flex;align-items:center;gap:10px;color:#dce6df;text-decoration:none;padding:12px 13px;border-radius:12px;margin:6px 0;font-size:14px;cursor:pointer}
+nav a.active{background:linear-gradient(90deg,rgba(215,179,90,.2),rgba(33,168,107,.07));border:1px solid var(--line);color:var(--gold2)}
+.note-box{margin-top:18px;color:var(--muted);font-size:12px;line-height:1.65}.note-box strong{color:var(--white)}
+main{flex:1;padding:24px 30px 36px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.topbar h2{font-size:27px;margin:0 0 5px}.topbar p{margin:0;color:var(--muted);font-size:14px}
+.status{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.pill{padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(215,179,90,.08);color:var(--gold2);font-size:13px}
+.grid{display:grid;grid-template-columns:1.22fr .78fr;gap:20px}.card{background:linear-gradient(180deg,rgba(16,38,28,.98),rgba(7,18,13,.98));border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 42px rgba(0,0,0,.28);overflow:hidden}
+.card h3{margin:0;padding:17px 20px;border-bottom:1px solid rgba(215,179,90,.17);font-size:16px;letter-spacing:.03em;display:flex;align-items:center;justify-content:space-between}.card h3 span{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0}
+.card-body{padding:20px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+input,select,textarea{width:100%;background:var(--input);border:1px solid rgba(255,255,255,.12);color:var(--white);border-radius:12px;padding:12px;outline:none;font-size:14px}input:focus,select:focus,textarea:focus{border-color:var(--gold)}input[readonly]{color:#cbd8d0;background:#09150f}.full{grid-column:1/-1}textarea{min-height:80px;resize:vertical}.hint{margin-top:7px;color:#9fb3a8;font-size:11px;line-height:1.4}
+.autofill{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 2px}.info{border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.18);border-radius:14px;padding:12px}.info span{font-size:11px;color:var(--muted)}.info strong{display:block;margin-top:5px;font-size:14px;color:#eaf4ee}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.metric{border:1px solid rgba(215,179,90,.17);border-radius:16px;padding:14px;background:rgba(0,0,0,.17)}.metric span{font-size:12px;color:var(--muted)}.metric strong{display:block;font-size:21px;margin-top:6px;color:var(--gold2)}
+.actions{display:flex;gap:12px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#141007}.secondary{background:rgba(255,255,255,.08);color:var(--white);border:1px solid rgba(255,255,255,.14)}
+.closing{display:grid;gap:10px}.closing-row{display:flex;justify-content:space-between;border-bottom:1px dashed rgba(255,255,255,.11);padding:8px 0;color:#e0e9e3}.closing-row span{color:var(--muted)}
+.notice{margin-top:15px;padding:13px 15px;border-left:3px solid var(--gold);background:rgba(215,179,90,.08);color:#eadfbd;border-radius:12px;font-size:13px;line-height:1.5}
+.table{margin-top:20px;width:100%;border-collapse:collapse;font-size:13px}.table th{color:var(--muted);text-align:left;padding:12px;border-bottom:1px solid rgba(255,255,255,.09);font-size:12px;font-weight:500}.table td{padding:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(33,168,107,.15);color:#a4f1c9;font-size:11px}.bad{background:rgba(185,78,78,.16);color:#ffc6c6}
+.login-screen{position:fixed;inset:0;background:rgba(2,6,4,.92);display:flex;align-items:center;justify-content:center;z-index:20}.login-box{width:min(420px,92vw);background:linear-gradient(180deg,#10261c,#07120d);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.45)}.login-box h2{margin:0 0 6px}.login-box p{margin:0 0 18px;color:var(--muted)}
+.msg{padding:12px;border-radius:12px;margin-top:12px;font-size:13px;display:none}.msg.ok{display:block;background:rgba(33,168,107,.14);color:#b9f2d2;border:1px solid rgba(33,168,107,.28)}.msg.err{display:block;background:rgba(185,78,78,.15);color:#ffd0d0;border:1px solid rgba(185,78,78,.3)}
+.print-area{display:none}
+@media print{body{background:#fff;color:#000}.app,.login-screen{display:none}.print-area{display:block;color:#000;font-family:Arial,sans-serif}.print-report{padding:24px}.print-report h1{text-align:center;font-size:18px;margin:0 0 16px}.print-row{display:flex;justify-content:space-between;border-bottom:1px solid #999;padding:8px 0}.signs{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:60px}.signs div{border-top:1px solid #000;text-align:center;padding-top:8px}}
+@media (max-width:1080px){aside{display:none}.grid{grid-template-columns:1fr}}@media (max-width:720px){main{padding:18px}.form-grid,.autofill,.summary{grid-template-columns:1fr}.topbar{display:block}.status{justify-content:flex-start;margin-top:12px}}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <h2>Everest Cage Login</h2>
+    <p>Internal use only.</p>
+    <label>Cage ID</label>
+    <input id="loginCageId" value="C000" autocomplete="username" />
+    <label style="margin-top:12px;">Password</label>
+    <input id="loginPassword" type="password" value="0000" autocomplete="current-password" />
+    <div class="actions">
+      <button class="primary" onclick="login()">Login</button>
+    </div>
+    <div id="loginMsg" class="msg"></div>
+  </div>
+</div>
+
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="logo">EV</div>
+      <div><h1>EVEREST<br>POKER ROOM</h1><small>CAGE SYSTEM</small></div>
+    </div>
+
+    <div class="login-card">
+      <div class="staff-name" id="staffDisplay">Not logged in</div>
+      <div class="role" id="roleDisplay">User Group: -<br>Current Shift: -</div>
+    </div>
+
+    <nav>
+      <a class="active">▣ New Transaction</a>
+      <a>◆ Promo Voucher</a>
+      <a>● Points Top-Up</a>
+      <a>◈ Close Shift</a>
+      <a>⌕ Transaction Search</a>
+      <a>! Void / Correction</a>
+      <a>▤ Audit Report</a>
+    </nav>
+
+    <div class="note-box">
+      <strong>Shift Rule</strong><br>
+      DAY: 12:00–24:00<br>
+      NIGHT: 24:00–12:00<br><br>
+      <strong>Control Rule</strong><br>
+      Submitted records cannot be deleted. Correction must be processed by Void / Correction.
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h2>Cage Management System</h2>
+        <p>Internal Cage records · Linked with Points System Member Database.</p>
+      </div>
+      <div class="status">
+        <div class="pill" id="datePill">Date: -</div>
+        <div class="pill" id="shiftPill">Shift: -</div>
+        <div class="pill">Default Currency: PHP</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h3>New Cage Transaction <span>Transaction locked after submission</span></h3>
+        <div class="card-body">
+          <div class="form-grid">
+            <div>
+              <label>Transaction Type</label>
+              <select id="transactionType" onchange="recalculate()">
+                <option>Player Deposit / Room Deposit</option>
+                <option>Player Refund / Withdrawal</option>
+                <option>Promo Voucher Redemption</option>
+                <option>Points Top-Up</option>
+                <option>Cage Transfer In</option>
+                <option>Cage Transfer Out</option>
+              </select>
+            </div>
+            <div>
+              <label>Transaction ID</label>
+              <input id="transactionIdPreview" value="Auto generated after Submit" readonly />
+            </div>
+
+            <div>
+              <label>Member ID</label>
+              <input id="memberId" placeholder="e.g. 10582" onblur="lookupMember()" />
+              <div class="hint">After input Member ID, system auto-fills member data from Points System.</div>
+            </div>
+            <div>
+              <label>Player Name</label>
+              <input id="playerName" readonly />
+            </div>
+          </div>
+
+          <div class="autofill">
+            <div class="info"><span>Tier</span><strong id="tier">-</strong></div>
+            <div class="info"><span>Nationality</span><strong id="nationality">-</strong></div>
+            <div class="info"><span>Current Points</span><strong id="currentPoints">-</strong></div>
+            <div class="info"><span>KYC Status</span><strong id="kycStatus">-</strong></div>
+          </div>
+
+          <div class="form-grid" style="margin-top:14px;">
+            <div>
+              <label>Currency</label>
+              <select id="currency" onchange="handleCurrencyChange()">
+                <option selected>PHP</option><option>TWD</option><option>HKD</option><option>KRW</option><option>JPY</option>
+              </select>
+            </div>
+            <div>
+              <label>Exchange Rate</label>
+              <input id="exchangeRate" value="1.0000" oninput="recalculate()" />
+              <div class="hint">Default is 1 for PHP. Manual edit remains available.</div>
+            </div>
+            <div>
+              <label>Original Amount</label>
+              <input id="originalAmount" placeholder="0.00" oninput="recalculate()" />
+            </div>
+            <div>
+              <label>PHP Amount</label>
+              <input id="phpAmount" value="₱0.00" readonly />
+            </div>
+            <div>
+              <label>Payment Method</label>
+              <select id="paymentMethod">
+                <option selected>Cash</option>
+                <option>Promo Voucher</option>
+                <option>Others - Updated in Remark</option>
+              </select>
+            </div>
+            <div>
+              <label>Slip / Voucher No.</label>
+              <input id="slipVoucherNo" placeholder="Receipt / Voucher / Slip ID" />
+            </div>
+            <div class="full">
+              <label>Remark</label>
+              <textarea id="remark" placeholder="Example: Room deposit for 1 night."></textarea>
+            </div>
+          </div>
+
+          <div class="summary">
+            <div class="metric"><span>Cash In</span><strong id="cashInPreview">₱0</strong></div>
+            <div class="metric"><span>Cash Out</span><strong id="cashOutPreview">₱0</strong></div>
+            <div class="metric"><span>Status</span><strong id="statusPreview">Draft</strong></div>
+          </div>
+
+          <div class="actions">
+            <button class="secondary" onclick="clearForm()">Clear</button>
+            <button class="primary" onclick="submitTransaction()">Submit</button>
+          </div>
+          <div id="txnMsg" class="msg"></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="card">
+          <h3>Close Shift <span>DAY / NIGHT Report</span></h3>
+          <div class="card-body closing">
+            <div class="closing-row"><span>Current Shift</span><strong id="closingShift">-</strong></div>
+            <div class="closing-row"><span>Opening Balance</span><strong><input id="openingBalance" value="0" oninput="refreshShiftSummary()" /></strong></div>
+            <div class="closing-row"><span>Total Cash In</span><strong id="sumCashIn">₱0</strong></div>
+            <div class="closing-row"><span>Total Cash Out</span><strong id="sumCashOut">₱0</strong></div>
+            <div class="closing-row"><span>Expected Balance</span><strong id="expectedBalance">₱0</strong></div>
+            <div class="closing-row"><span>Actual Count</span><strong><input id="actualBalance" value="0" oninput="refreshLocalClosing()" /></strong></div>
+            <div class="closing-row"><span>Variance</span><strong id="variance">₱0</strong></div>
+
+            <div class="form-grid">
+              <div>
+                <label>Verified By</label>
+                <input id="verifiedBy" placeholder="Supervisor name / Cage ID" />
+              </div>
+              <div>
+                <label>Closing Remark</label>
+                <input id="closingRemark" placeholder="Optional" />
+              </div>
+            </div>
+
+            <div class="notice">
+              Close Shift generates a printable DAY or NIGHT shift report. Staff signs it, Supervisor verifies it, then paper copy is filed with vouchers and slips.
+            </div>
+
+            <div class="actions">
+              <button class="secondary" onclick="previewReport()">Preview Report</button>
+              <button class="primary" onclick="closeShift()">Close Shift & Print</button>
+            </div>
+            <div id="closeMsg" class="msg"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:20px;">
+      <h3>Recent Status <span>Current session</span></h3>
+      <div class="card-body">
+        <table class="table">
+          <thead><tr><th>Item</th><th>Value</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>API</td><td id="apiStatus">Not checked</td><td><span class="tag" id="apiTag">Ready</span></td></tr>
+            <tr><td>Last Transaction</td><td id="lastTxn">-</td><td><span class="tag">Session</span></td></tr>
+            <tr><td>Last Closing Report</td><td id="lastReport">-</td><td><span class="tag">Session</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="print-area">
+  <div class="print-report" id="printReport"></div>
+</div>
+
+<script>
+const CONFIG = {
+  API_URL: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
+  APP_TOKEN: "PASTE_YOUR_APP_TOKEN_HERE"
+};
+
+const state = {
+  staff: null,
+  password: "",
+  shift: null,
+  latestSummary: { totalCashIn: 0, totalCashOut: 0, voucherCount: 0, slipCount: 0 }
+};
+
+function money(n){
+  const num = Number(n || 0);
+  return "₱" + num.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+function val(id){ return document.getElementById(id).value; }
+function set(id, value){ document.getElementById(id).textContent = value; }
+function setMsg(id, text, ok=true){
+  const el = document.getElementById(id);
+  el.className = "msg " + (ok ? "ok" : "err");
+  el.textContent = text;
+}
+function clearMsg(id){
+  const el = document.getElementById(id);
+  el.className = "msg";
+  el.textContent = "";
+}
+
+function api(action, params = {}){
+  return new Promise((resolve, reject) => {
+    if (!CONFIG.API_URL.includes("script.google.com")) {
+      reject(new Error("Please set CONFIG.API_URL in Cage.html."));
+      return;
+    }
+
+    const cbName = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random()*100000);
+    const url = new URL(CONFIG.API_URL);
+    url.searchParams.set("callback", cbName);
+    url.searchParams.set("token", CONFIG.APP_TOKEN);
+    url.searchParams.set("action", action);
+
+    Object.entries(params).forEach(([k,v]) => {
+      if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
+    });
+
+    const script = document.createElement("script");
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("API timeout."));
+    }, 15000);
+
+    function cleanup(){
+      clearTimeout(timer);
+      delete window[cbName];
+      script.remove();
+    }
+
+    window[cbName] = (data) => {
+      cleanup();
+      if (!data.ok) reject(new Error(data.error || "API error."));
+      else resolve(data);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("API connection failed."));
+    };
+
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
+
+async function login(){
+  clearMsg("loginMsg");
+  try{
+    const cageId = val("loginCageId").trim().toUpperCase();
+    const password = val("loginPassword");
+    const res = await api("login", { cageId, password });
+    state.staff = res.staff;
+    state.password = password;
+    state.shift = res.shift;
+
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("staffDisplay").textContent = `${res.staff.cageId} — ${res.staff.name}`;
+    document.getElementById("roleDisplay").innerHTML = `User Group: ${res.staff.roleName} ${res.staff.userGroup}<br>Current Shift: ${res.shift.display}`;
+    set("datePill", "Date: " + res.shift.businessDate);
+    set("shiftPill", "Shift: " + res.shift.display);
+    set("closingShift", res.shift.display);
+    set("apiStatus", "Connected");
+    set("apiTag", "Online");
+    refreshShiftSummary();
+  }catch(err){
+    setMsg("loginMsg", err.message, false);
+  }
+}
+
+async function lookupMember(){
+  const memberId = val("memberId").trim();
+  if (!memberId) return;
+  try{
+    const res = await api("getMember", auth({ memberId }));
+    const m = res.member;
+    document.getElementById("playerName").value = m.playerName || "";
+    set("tier", m.tier || "-");
+    set("nationality", m.nationality || "-");
+    set("kycStatus", m.kycStatus || "-");
+    set("currentPoints", m.currentPoints || "-");
+  }catch(err){
+    set("tier", "-"); set("nationality", "-"); set("kycStatus", "-"); set("currentPoints", "-");
+    document.getElementById("playerName").value = "";
+    setMsg("txnMsg", "Member lookup: " + err.message, false);
+  }
+}
+
+function auth(extra = {}){
+  if (!state.staff) throw new Error("Please login first.");
+  return Object.assign({
+    cageId: state.staff.cageId,
+    password: state.password
+  }, extra);
+}
+
+function handleCurrencyChange(){
+  if (val("currency") === "PHP") document.getElementById("exchangeRate").value = "1.0000";
+  recalculate();
+}
+
+function recalculate(){
+  const type = val("transactionType");
+  const amount = Number(val("originalAmount").replace(/,/g,"")) || 0;
+  const rate = Number(val("exchangeRate").replace(/,/g,"")) || 0;
+  const php = amount * rate;
+  document.getElementById("phpAmount").value = money(php);
+
+  const cashInTypes = ["Player Deposit / Room Deposit","Promo Voucher Redemption","Points Top-Up","Cage Transfer In"];
+  const cashOutTypes = ["Player Refund / Withdrawal","Cage Transfer Out"];
+
+  set("cashInPreview", cashInTypes.includes(type) ? money(php) : money(0));
+  set("cashOutPreview", cashOutTypes.includes(type) ? money(php) : money(0));
+  set("statusPreview", amount > 0 ? "Ready" : "Draft");
+}
+
+async function submitTransaction(){
+  clearMsg("txnMsg");
+  try{
+    const params = auth({
+      transactionType: val("transactionType"),
+      memberId: val("memberId").trim(),
+      playerName: val("playerName").trim(),
+      tier: document.getElementById("tier").textContent,
+      nationality: document.getElementById("nationality").textContent,
+      kycStatus: document.getElementById("kycStatus").textContent,
+      currency: val("currency"),
+      exchangeRate: val("exchangeRate"),
+      originalAmount: val("originalAmount"),
+      paymentMethod: val("paymentMethod"),
+      slipVoucherNo: val("slipVoucherNo").trim(),
+      remark: val("remark").trim()
+    });
+
+    const res = await api("submitTransaction", params);
+    document.getElementById("transactionIdPreview").value = res.transactionId;
+    set("lastTxn", `${res.transactionId} / ${money(res.phpAmount)}`);
+    setMsg("txnMsg", `Submitted: ${res.transactionId}`, true);
+    refreshShiftSummary();
+  }catch(err){
+    setMsg("txnMsg", err.message, false);
+  }
+}
+
+async function refreshShiftSummary(){
+  if (!state.staff) return;
+  try{
+    const res = await api("getShiftSummary", auth({}));
+    state.latestSummary = res.summary;
+    refreshLocalClosing();
+  }catch(err){
+    setMsg("closeMsg", "Summary: " + err.message, false);
+  }
+}
+
+function refreshLocalClosing(){
+  const opening = Number(val("openingBalance").replace(/,/g,"")) || 0;
+  const actual = Number(val("actualBalance").replace(/,/g,"")) || 0;
+  const cashIn = Number(state.latestSummary.totalCashIn || 0);
+  const cashOut = Number(state.latestSummary.totalCashOut || 0);
+  const expected = opening + cashIn - cashOut;
+  const variance = actual - expected;
+
+  set("sumCashIn", money(cashIn));
+  set("sumCashOut", money(cashOut));
+  set("expectedBalance", money(expected));
+  set("variance", money(variance));
+}
+
+function previewReport(){
+  buildPrintReport({
+    reportNo: "PREVIEW",
+    businessDate: state.shift ? state.shift.businessDate : "-",
+    shift: state.shift ? state.shift.display : "-",
+    openingBalance: Number(val("openingBalance")) || 0,
+    totalCashIn: Number(state.latestSummary.totalCashIn || 0),
+    totalCashOut: Number(state.latestSummary.totalCashOut || 0),
+    expectedBalance: (Number(val("openingBalance")) || 0) + Number(state.latestSummary.totalCashIn || 0) - Number(state.latestSummary.totalCashOut || 0),
+    actualBalance: Number(val("actualBalance")) || 0,
+    variance: (Number(val("actualBalance")) || 0) - ((Number(val("openingBalance")) || 0) + Number(state.latestSummary.totalCashIn || 0) - Number(state.latestSummary.totalCashOut || 0)),
+    voucherCount: state.latestSummary.voucherCount || 0,
+    slipCount: state.latestSummary.slipCount || 0,
+    preparedBy: state.staff ? `${state.staff.cageId} ${state.staff.name}` : "-",
+    verifiedBy: val("verifiedBy") || "-",
+    remark: val("closingRemark") || ""
+  });
+  window.print();
+}
+
+async function closeShift(){
+  clearMsg("closeMsg");
+  try{
+    const res = await api("closeShift", auth({
+      openingBalance: val("openingBalance"),
+      actualBalance: val("actualBalance"),
+      verifiedBy: val("verifiedBy"),
+      remark: val("closingRemark")
+    }));
+    set("lastReport", res.report.reportNo);
+    buildPrintReport(res.report);
+    setMsg("closeMsg", `Closed: ${res.report.reportNo}`, true);
+    window.print();
+  }catch(err){
+    setMsg("closeMsg", err.message, false);
+  }
+}
+
+function buildPrintReport(r){
+  document.getElementById("printReport").innerHTML = `
+    <h1>EVEREST POKER ROOM<br>CAGE SHIFT CLOSING REPORT</h1>
+    ${printRow("Report No.", r.reportNo)}
+    ${printRow("Business Date", r.businessDate)}
+    ${printRow("Shift", r.shift)}
+    ${printRow("Opening Balance", money(r.openingBalance))}
+    ${printRow("Total Cash In", money(r.totalCashIn))}
+    ${printRow("Total Cash Out", money(r.totalCashOut))}
+    ${printRow("Expected Balance", money(r.expectedBalance))}
+    ${printRow("Actual Balance", money(r.actualBalance))}
+    ${printRow("Variance", money(r.variance))}
+    ${printRow("Voucher Count", r.voucherCount)}
+    ${printRow("Slip Count", r.slipCount)}
+    ${printRow("Prepared By", r.preparedBy)}
+    ${printRow("Verified By", r.verifiedBy)}
+    ${printRow("Remark", r.remark || "")}
+    <div class="signs"><div>Prepared by</div><div>Verified by</div></div>
+  `;
+}
+function printRow(label, value){
+  return `<div class="print-row"><strong>${label}</strong><span>${value}</span></div>`;
+}
+
+function clearForm(){
+  ["memberId","playerName","originalAmount","slipVoucherNo","remark"].forEach(id => document.getElementById(id).value = "");
+  ["tier","nationality","currentPoints","kycStatus"].forEach(id => set(id, "-"));
+  document.getElementById("transactionIdPreview").value = "Auto generated after Submit";
+  document.getElementById("currency").value = "PHP";
+  document.getElementById("exchangeRate").value = "1.0000";
+  document.getElementById("paymentMethod").value = "Cash";
+  recalculate();
+  clearMsg("txnMsg");
+}
+recalculate();
+</script>
+</body>
+</html>
