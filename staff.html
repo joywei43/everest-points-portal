@@ -276,7 +276,7 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
     </nav>
 
     <div class="note-box">
-      <strong>Emergency Version</strong><br>
+      <strong>Stable Manual Search Version</strong><br>
       This page connects to the Member API only.<br><br>
       Use for register / member / staff / points recovery.
     </div>
@@ -304,12 +304,14 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
               id="memberSearch"
               placeholder="Member Code / Name / Nick Name / Passport / Phone / Email"
               autocomplete="off"
-              oninput="debounceMemberSearch()"
-              onkeydown="if(event.key==='Enter'){lookupMemberBySearch();}"
+              onkeydown="if(event.key==='Enter'){searchMemberOptions();}"
             />
             <input id="selectedMemberCode" type="hidden" />
             <div id="memberDropdown" class="member-dropdown"></div>
-            <div class="hint">Type 1+ character to search. Select the correct member from dropdown.</div>
+            <div class="hint">Type keyword, then click Search Member. Select the correct member from dropdown.</div>
+            <div class="actions" style="justify-content:flex-start;margin-top:10px;">
+              <button class="secondary" onclick="searchMemberOptions()">Search Member</button>
+            </div>
           </div>
 
           <div><label>Member Code</label><input id="memberCode" readonly /></div>
@@ -547,6 +549,10 @@ function dateOnly(value) {
   return raw;
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function api(action, params = {}) {
   return new Promise((resolve, reject) => {
     const cb = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
@@ -646,8 +652,7 @@ function normalizeSearchCode(value) {
 }
 
 function debounceMemberSearch() {
-  clearTimeout(memberSearchTimer);
-  memberSearchTimer = setTimeout(searchMemberOptions, 300);
+  // Disabled to prevent repeated network access prompts.
 }
 
 async function searchMemberOptions() {
@@ -816,6 +821,7 @@ async function submitPoints() {
     setMsg("pointsMsg", `${action} completed. Balance: ${numberText(res.balanceAfter || res.balance || 0)}`, true);
 
     await reloadSelectedMember();
+    await sleep(500);
     await loadHistory();
 
   } catch (err) {
