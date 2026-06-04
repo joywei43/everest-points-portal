@@ -1,37 +1,798 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Everest Player Points</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Everest Poker Room Member</title>
 
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #070707;
-      overflow: hidden;
+    :root {
+      --bg: #050805;
+      --card: #101510;
+      --card2: #151c15;
+      --gold: #d8b96a;
+      --green: #1f8f4d;
+      --green2: #27b96a;
+      --text: #f5f5f0;
+      --muted: #b6b6a8;
+      --danger: #ff6b6b;
+      --line: rgba(216, 185, 106, 0.22);
     }
 
-    iframe {
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(31, 143, 77, 0.25), transparent 35%),
+        linear-gradient(180deg, #020302 0%, #071007 100%);
+      color: var(--text);
+    }
+
+    .page {
       width: 100%;
-      height: 100vh;
-      border: none;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .logo-box {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .logo {
+      width: 118px;
+      max-width: 42%;
+      margin-bottom: 10px;
+    }
+
+    .brand-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      margin: 0;
+    }
+
+    .brand-subtitle {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(21, 28, 21, 0.96), rgba(10, 14, 10, 0.96));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.38);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      color: var(--gold);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    label {
       display: block;
-      background: #070707;
+      margin-bottom: 7px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(216, 185, 106, 0.25);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      font-size: 16px;
+      outline: none;
+      margin-bottom: 14px;
+    }
+
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(216, 185, 106, 0.12);
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 13px;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+    }
+
+    button.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(216, 185, 106, 0.25);
+      color: var(--gold);
+      margin-top: 10px;
+    }
+
+    button.danger {
+      background: rgba(255, 107, 107, 0.15);
+      border: 1px solid rgba(255, 107, 107, 0.35);
+      color: #ff9b9b;
+      margin-top: 10px;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .msg {
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .msg.error {
+      color: var(--danger);
+    }
+
+    .profile-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .member-name {
+      font-size: 22px;
+      font-weight: 900;
+      margin: 0;
+      color: #fff;
+    }
+
+    .member-code {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .tier {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(216, 185, 106, 0.12);
+      border: 1px solid rgba(216, 185, 106, 0.35);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .balance-box {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(31, 143, 77, 0.12);
+      border: 1px solid rgba(39, 185, 106, 0.28);
+      text-align: center;
+    }
+
+    .balance-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .balance {
+      font-size: 38px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .balance-unit {
+      margin-top: 7px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .notice {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .info-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 13px;
+      padding: 12px;
+      min-height: 66px;
+    }
+
+    .info-label {
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .info-value {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .txn-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .txn {
+      padding: 13px;
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .txn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .txn-type {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .txn-amount {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .txn-note {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .txn-date {
+      margin-top: 5px;
+      color: rgba(245, 245, 240, 0.55);
+      font-size: 11px;
+    }
+
+    .loading {
+      text-align: center;
+      color: var(--gold);
+      font-size: 13px;
+      margin: 12px 0;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      color: rgba(245, 245, 240, 0.45);
+      font-size: 11px;
     }
   </style>
 </head>
 
 <body>
-  <iframe
-    src="https://script.google.com/macros/s/AKfycbyALYMa624HcSCtQmB1Oq5_g7LdNqQdXS_nUENb8D4U29gWB1SYHC-4mp5RzTjpTQZ2/exec"
-    allow="clipboard-read; clipboard-write"
-  ></iframe>
+  <main class="page">
+    <div class="logo-box">
+      <img src="logo.png" alt="Everest Poker Room" class="logo" onerror="this.style.display='none'" />
+      <h1 class="brand-title">EVEREST POKER ROOM</h1>
+      <div class="brand-subtitle">Member Portal</div>
+    </div>
+
+    <!-- Login -->
+    <section id="loginCard" class="card">
+      <h2 class="section-title">Member Login</h2>
+
+      <label for="memberCode">Member Code</label>
+      <input id="memberCode" type="text" placeholder="Enter your member code" autocomplete="username" />
+
+      <label for="pin">PIN</label>
+      <input id="pin" type="password" placeholder="Enter your PIN" autocomplete="current-password" />
+
+      <button id="loginBtn" onclick="login()">LOGIN</button>
+
+      <div id="loginMsg" class="msg"></div>
+
+      <div class="notice">
+        Default PIN may be <strong>0000</strong> if you have not changed it.
+        <br />
+        Please contact the counter if you cannot log in.
+      </div>
+    </section>
+
+    <!-- Member Dashboard -->
+    <section id="dashboard" class="hidden">
+      <div class="card">
+        <div class="profile-top">
+          <div>
+            <p id="memberName" class="member-name">Member</p>
+            <div id="memberCodeText" class="member-code">Member Code: -</div>
+          </div>
+          <div id="memberTier" class="tier">-</div>
+        </div>
+
+        <div class="balance-box">
+          <div class="balance-label">Current Balance</div>
+          <div id="balance" class="balance">0</div>
+          <div class="balance-unit">POINTS</div>
+        </div>
+
+        <div class="notice">
+          Please present your physical card for any activity.
+          <br />
+          All member perks are subject to availability and gaming record.
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Nationality</div>
+            <div id="nationality" class="info-value">-</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Status</div>
+            <div id="status" class="info-value">-</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Phone</div>
+            <div id="phone" class="info-value">-</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Email</div>
+            <div id="email" class="info-value">-</div>
+          </div>
+        </div>
+
+        <button class="secondary" onclick="showPinCard()">Change PIN</button>
+        <button class="danger" onclick="logout()">Logout</button>
+      </div>
+
+      <!-- Change PIN -->
+      <div id="pinCard" class="card hidden">
+        <h2 class="section-title">Change PIN</h2>
+
+        <label for="oldPin">Current PIN</label>
+        <input id="oldPin" type="password" placeholder="Current PIN" />
+
+        <label for="newPin">New PIN</label>
+        <input id="newPin" type="password" placeholder="New PIN, 4 digits recommended" />
+
+        <label for="confirmPin">Confirm New PIN</label>
+        <input id="confirmPin" type="password" placeholder="Confirm New PIN" />
+
+        <button id="changePinBtn" onclick="changePin()">UPDATE PIN</button>
+        <button class="secondary" onclick="hidePinCard()">Cancel</button>
+
+        <div id="pinMsg" class="msg"></div>
+      </div>
+
+      <!-- Transactions -->
+      <div class="card">
+        <h2 class="section-title">Transaction History</h2>
+        <button class="secondary" onclick="loadTransactions()">Refresh Transactions</button>
+        <div id="txnLoading" class="loading hidden">Loading transactions...</div>
+        <div id="txnList" class="txn-list"></div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Everest Poker Room Member System
+    </div>
+  </main>
+
+  <script>
+    /************************************************************
+     * IMPORTANT:
+     * This is MEMBER API URL.
+     * Do NOT replace this with Cage API URL.
+     ************************************************************/
+    const API_URL = "https://script.google.com/macros/s/AKfycbyALYMa624HcSCtQmB1Oq5_g7LdNqQdXS_nUENb8D4U29gWB1SYHC-4mp5RzTjpTQZ2/exec";
+
+    let currentMember = null;
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function setMsg(id, text, isError = false) {
+      const el = $(id);
+      el.textContent = text || "";
+      el.className = isError ? "msg error" : "msg";
+    }
+
+    function setLoading(btnId, loading, text) {
+      const btn = $(btnId);
+      if (!btn) return;
+      if (loading) {
+        btn.dataset.oldText = btn.textContent;
+        btn.textContent = text || "Loading...";
+        btn.disabled = true;
+      } else {
+        btn.textContent = btn.dataset.oldText || btn.textContent;
+        btn.disabled = false;
+      }
+    }
+
+    async function apiCall(payload) {
+      const form = new URLSearchParams();
+
+      Object.keys(payload).forEach((key) => {
+        if (payload[key] !== undefined && payload[key] !== null) {
+          form.append(key, payload[key]);
+        }
+      });
+
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: form
+      });
+
+      const text = await res.text();
+
+      try {
+        return JSON.parse(text);
+      } catch (e) {
+        console.error("API raw response:", text);
+        throw new Error("Invalid API response. Please check Code.gs response format.");
+      }
+    }
+
+    function normalizeSuccess(data) {
+      return data && (
+        data.success === true ||
+        data.ok === true ||
+        data.status === "success" ||
+        data.result === "success"
+      );
+    }
+
+    function pickMember(data) {
+      return (
+        data.member ||
+        data.player ||
+        data.data ||
+        data.profile ||
+        data
+      );
+    }
+
+    function getValue(obj, keys, fallback = "-") {
+      if (!obj) return fallback;
+
+      for (const key of keys) {
+        if (obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
+          return obj[key];
+        }
+      }
+
+      return fallback;
+    }
+
+    function formatPoints(value) {
+      const num = Number(value || 0);
+      if (Number.isNaN(num)) return value || "0";
+      return num.toLocaleString("en-US");
+    }
+
+    function formatDate(value) {
+      if (!value) return "";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    async function tryActions(actions, basePayload) {
+      let lastError = null;
+
+      for (const action of actions) {
+        try {
+          const data = await apiCall({
+            action,
+            ...basePayload
+          });
+
+          if (normalizeSuccess(data)) {
+            return data;
+          }
+
+          lastError = data;
+        } catch (err) {
+          lastError = err;
+        }
+      }
+
+      if (lastError instanceof Error) {
+        throw lastError;
+      }
+
+      return lastError || { success: false, message: "Request failed." };
+    }
+
+    async function login() {
+      const memberCode = $("memberCode").value.trim();
+      const pin = $("pin").value.trim();
+
+      setMsg("loginMsg", "");
+
+      if (!memberCode || !pin) {
+        setMsg("loginMsg", "Please enter Member Code and PIN.", true);
+        return;
+      }
+
+      setLoading("loginBtn", true, "LOGGING IN...");
+
+      try {
+        const data = await tryActions(
+          ["loginMember", "memberLogin", "playerLogin", "login"],
+          {
+            memberCode,
+            code: memberCode,
+            memberId: memberCode,
+            pin,
+            password: pin
+          }
+        );
+
+        if (!normalizeSuccess(data)) {
+          setMsg("loginMsg", data.message || data.error || "Login failed. Please check your Member Code and PIN.", true);
+          return;
+        }
+
+        currentMember = pickMember(data);
+        currentMember.memberCode = getValue(currentMember, ["memberCode", "MemberCode", "code", "memberId", "id"], memberCode);
+
+        localStorage.setItem("everest_member_code", currentMember.memberCode);
+        localStorage.setItem("everest_member_pin", pin);
+
+        renderMember(currentMember);
+        $("loginCard").classList.add("hidden");
+        $("dashboard").classList.remove("hidden");
+
+        await loadTransactions();
+
+      } catch (err) {
+        console.error(err);
+        setMsg("loginMsg", "System error. Please check API URL or Code.gs.", true);
+      } finally {
+        setLoading("loginBtn", false);
+      }
+    }
+
+    function renderMember(member) {
+      const fullName =
+        getValue(member, ["name", "Name", "fullName", "FullName"], "") ||
+        [
+          getValue(member, ["surname", "Surname", "lastName"], ""),
+          getValue(member, ["familyName", "FamilyName", "firstName"], "")
+        ].filter(Boolean).join(" ") ||
+        "Member";
+
+      $("memberName").textContent = fullName;
+      $("memberCodeText").textContent = "Member Code: " + getValue(member, ["memberCode", "MemberCode", "code", "memberId", "id"], "-");
+      $("memberTier").textContent = getValue(member, ["tier", "cardTier", "CardTier", "memberTier", "Tier"], "-");
+      $("balance").textContent = formatPoints(getValue(member, ["balance", "points", "currentBalance", "CurrentBalance", "pointBalance"], 0));
+
+      $("nationality").textContent = getValue(member, ["nationality", "Nationality"], "-");
+      $("status").textContent = getValue(member, ["status", "Status", "memberStatus"], "Active");
+      $("phone").textContent = getValue(member, ["phone", "Phone", "mobile", "Mobile"], "-");
+      $("email").textContent = getValue(member, ["email", "Email"], "-");
+    }
+
+    async function loadTransactions() {
+      if (!currentMember) return;
+
+      const memberCode = getValue(currentMember, ["memberCode", "MemberCode", "code", "memberId", "id"], "");
+
+      $("txnLoading").classList.remove("hidden");
+      $("txnList").innerHTML = "";
+
+      try {
+        const data = await tryActions(
+          ["getMemberTransactions", "memberTransactions", "getTransactions", "listTransactions"],
+          {
+            memberCode,
+            code: memberCode,
+            memberId: memberCode
+          }
+        );
+
+        if (!normalizeSuccess(data)) {
+          $("txnList").innerHTML = `<div class="msg">No transaction record found.</div>`;
+          return;
+        }
+
+        const txns = data.transactions || data.records || data.data || [];
+
+        if (!Array.isArray(txns) || txns.length === 0) {
+          $("txnList").innerHTML = `<div class="msg">No transaction record found.</div>`;
+          return;
+        }
+
+        $("txnList").innerHTML = txns.map((t) => {
+          const type = getValue(t, ["type", "Type", "action", "Action"], "Transaction");
+          const amount = getValue(t, ["amount", "Amount", "points", "Points"], 0);
+          const note = getValue(t, ["note", "Note", "remarks", "Remarks", "description"], "");
+          const date = getValue(t, ["date", "Date", "timestamp", "Timestamp", "createdAt"], "");
+
+          return `
+            <div class="txn">
+              <div class="txn-row">
+                <div class="txn-type">${escapeHtml(type)}</div>
+                <div class="txn-amount">${Number(amount) > 0 ? "+" : ""}${escapeHtml(formatPoints(amount))}</div>
+              </div>
+              ${note ? `<div class="txn-note">${escapeHtml(note)}</div>` : ""}
+              ${date ? `<div class="txn-date">${escapeHtml(formatDate(date))}</div>` : ""}
+            </div>
+          `;
+        }).join("");
+
+      } catch (err) {
+        console.error(err);
+        $("txnList").innerHTML = `<div class="msg error">Unable to load transactions.</div>`;
+      } finally {
+        $("txnLoading").classList.add("hidden");
+      }
+    }
+
+    function showPinCard() {
+      $("pinCard").classList.remove("hidden");
+      setMsg("pinMsg", "");
+    }
+
+    function hidePinCard() {
+      $("pinCard").classList.add("hidden");
+      $("oldPin").value = "";
+      $("newPin").value = "";
+      $("confirmPin").value = "";
+      setMsg("pinMsg", "");
+    }
+
+    async function changePin() {
+      if (!currentMember) return;
+
+      const memberCode = getValue(currentMember, ["memberCode", "MemberCode", "code", "memberId", "id"], "");
+      const oldPin = $("oldPin").value.trim();
+      const newPin = $("newPin").value.trim();
+      const confirmPin = $("confirmPin").value.trim();
+
+      setMsg("pinMsg", "");
+
+      if (!oldPin || !newPin || !confirmPin) {
+        setMsg("pinMsg", "Please fill in all PIN fields.", true);
+        return;
+      }
+
+      if (newPin !== confirmPin) {
+        setMsg("pinMsg", "New PIN and confirmation do not match.", true);
+        return;
+      }
+
+      if (newPin.length < 4) {
+        setMsg("pinMsg", "New PIN must be at least 4 digits.", true);
+        return;
+      }
+
+      setLoading("changePinBtn", true, "UPDATING...");
+
+      try {
+        const data = await tryActions(
+          ["changePin", "updatePin", "changeMemberPin", "resetMemberPin"],
+          {
+            memberCode,
+            code: memberCode,
+            memberId: memberCode,
+            oldPin,
+            currentPin: oldPin,
+            pin: oldPin,
+            newPin
+          }
+        );
+
+        if (!normalizeSuccess(data)) {
+          setMsg("pinMsg", data.message || data.error || "Failed to update PIN.", true);
+          return;
+        }
+
+        localStorage.setItem("everest_member_pin", newPin);
+        setMsg("pinMsg", "PIN updated successfully.");
+        setTimeout(hidePinCard, 900);
+
+      } catch (err) {
+        console.error(err);
+        setMsg("pinMsg", "System error. Unable to update PIN.", true);
+      } finally {
+        setLoading("changePinBtn", false);
+      }
+    }
+
+    function logout() {
+      currentMember = null;
+      localStorage.removeItem("everest_member_code");
+      localStorage.removeItem("everest_member_pin");
+
+      $("dashboard").classList.add("hidden");
+      $("loginCard").classList.remove("hidden");
+      $("memberCode").value = "";
+      $("pin").value = "";
+      $("txnList").innerHTML = "";
+      hidePinCard();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedCode = localStorage.getItem("everest_member_code");
+      const savedPin = localStorage.getItem("everest_member_pin");
+
+      if (savedCode) $("memberCode").value = savedCode;
+      if (savedPin) $("pin").value = savedPin;
+
+      $("pin").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") login();
+      });
+
+      $("memberCode").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") login();
+      });
+    });
+  </script>
 </body>
 </html>
