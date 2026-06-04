@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Everest Poker Room | Cage System</title>
+<style>
+:root{
+  --bg:#06100c;
+  --panel:#0d1c15;
+  --gold:#d7b35a;
+  --gold2:#f5d77f;
+  --muted:#9cafaa;
+  --line:rgba(215,179,90,.25);
+  --white:#f6f1e5;
+  --input:#07130e;
+  --green:#21a86b;
+  --danger:#b94e4e;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 85% 5%,rgba(33,168,107,.18),transparent 35%),
+    radial-gradient(circle at 10% 0%,rgba(215,179,90,.13),transparent 32%),
+    linear-gradient(180deg,#07120e,#030806);
+  color:var(--white);
+  font-family:Inter,Arial,sans-serif;
+}
+.app{display:flex;min-height:100vh}
+aside{
+  width:278px;
+  background:linear-gradient(180deg,#08150f,#040a07);
+  border-right:1px solid var(--line);
+  padding:24px 20px;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  overflow:auto;
+}
+.brand{display:flex;gap:13px;align-items:center;margin-bottom:24px}
+.logo{
+  width:48px;height:48px;border-radius:50%;
+  border:1px solid var(--gold);
+  color:var(--gold2);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;
+  box-shadow:0 0 22px rgba(215,179,90,.16)
+}
+.brand h1{font-size:16px;line-height:1.12;margin:0;letter-spacing:.09em}
+.brand small{display:block;color:var(--muted);font-size:11px;margin-top:4px;letter-spacing:.16em}
+.login-card,.note-box{
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.035);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:18px;
+}
+.staff-name{font-size:15px;font-weight:800;color:var(--gold2)}
+.role{font-size:12px;color:#b9c7c0;margin-top:4px;line-height:1.55}
+nav a{
+  display:flex;align-items:center;gap:10px;
+  color:#dce6df;text-decoration:none;
+  padding:12px 13px;
+  border-radius:12px;
+  margin:6px 0;
+  font-size:14px;
+  cursor:pointer;
+}
+nav a.active,nav a:hover{
+  background:linear-gradient(90deg,rgba(215,179,90,.2),rgba(33,168,107,.07));
+  border:1px solid var(--line);
+  color:var(--gold2);
+}
+.note-box{margin-top:18px;color:var(--muted);font-size:12px;line-height:1.65}
+.note-box strong{color:var(--white)}
+main{flex:1;padding:24px 30px 36px;margin-left:278px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:18px}
+.topbar h2{font-size:27px;margin:0 0 5px}
+.topbar p{margin:0;color:var(--muted);font-size:14px}
+.status{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.pill{
+  padding:9px 13px;border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(215,179,90,.08);
+  color:var(--gold2);
+  font-size:13px
+}
+.grid{display:grid;grid-template-columns:1.22fr .78fr;gap:20px}
+.card{
+  background:linear-gradient(180deg,rgba(16,38,28,.98),rgba(7,18,13,.98));
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 18px 42px rgba(0,0,0,.28);
+  overflow:visible;
+  margin-bottom:20px
+}
+.card h3{
+  margin:0;
+  padding:17px 20px;
+  border-bottom:1px solid rgba(215,179,90,.17);
+  font-size:16px;
+  letter-spacing:.03em;
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+.card h3 span{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0}
+.card-body{padding:20px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three{grid-template-columns:1fr 1fr 1fr}
+.full{grid-column:1/-1}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+input,select,textarea{
+  width:100%;
+  background:var(--input);
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--white);
+  border-radius:12px;
+  padding:12px;
+  outline:none;
+  font-size:14px
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input[readonly]{color:#cbd8d0;background:#09150f}
+textarea{min-height:80px;resize:vertical}
+.hint{margin-top:7px;color:#9fb3a8;font-size:11px;line-height:1.4}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.metric{
+  border:1px solid rgba(215,179,90,.17);
+  border-radius:16px;
+  padding:14px;
+  background:rgba(0,0,0,.17)
+}
+.metric span{font-size:12px;color:var(--muted)}
+.metric strong{display:block;font-size:21px;margin-top:6px;color:var(--gold2)}
+.actions{display:flex;gap:12px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer}
+.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#141007}
+.secondary{background:rgba(255,255,255,.08);color:var(--white);border:1px solid rgba(255,255,255,.14)}
+.danger{background:rgba(185,78,78,.15);color:#ffd6d6;border:1px solid rgba(185,78,78,.34)}
+.closing{display:grid;gap:10px}
+.closing-row{
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:12px;
+  align-items:center;
+  border-bottom:1px dashed rgba(255,255,255,.11);
+  padding:8px 0;
+  color:#e0e9e3
+}
+.closing-row span{color:var(--muted)}
+.closing-row strong{color:var(--gold2)}
+.closing-row input{text-align:right;padding:8px 10px}
+.notice{
+  margin-top:15px;
+  padding:13px 15px;
+  border-left:3px solid var(--gold);
+  background:rgba(215,179,90,.08);
+  color:#eadfbd;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.5
+}
+.msg{
+  padding:12px;
+  border-radius:12px;
+  margin-top:12px;
+  font-size:13px;
+  display:none
+}
+.msg.ok{display:block;background:rgba(33,168,107,.14);color:#b9f2d2;border:1px solid rgba(33,168,107,.28)}
+.msg.err{display:block;background:rgba(185,78,78,.15);color:#ffd0d0;border:1px solid rgba(185,78,78,.3)}
+.login-screen{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,4,.92);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:100
+}
+.login-box{
+  width:min(420px,92vw);
+  background:linear-gradient(180deg,#10261c,#07120d);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.45)
+}
+.login-box h2{margin:0 0 6px}
+.login-box p{margin:0 0 18px;color:var(--muted)}
+.member-wrap{position:relative}
+.member-dropdown{
+  display:none;
+  position:absolute;
+  z-index:80;
+  top:76px;
+  left:0;
+  right:0;
+  background:#07130e;
+  border:1px solid rgba(215,179,90,.35);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 18px 40px rgba(0,0,0,.45)
+}
+.member-item{
+  padding:12px;
+  cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  color:#f6f1e5
+}
+.member-item:hover{background:rgba(215,179,90,.12)}
+.member-item strong{color:var(--gold2)}
+.member-item small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}
+.txn-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+.txn-table th,.txn-table td{
+  border-bottom:1px solid rgba(255,255,255,.08);
+  padding:10px 8px;
+  text-align:left;
+  vertical-align:top;
+}
+.txn-table th{color:var(--gold2);font-size:11px}
+.txn-table td{color:#dce6df}
+.hidden{display:none}
+.print-area{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  .app,.login-screen{display:none}
+  .print-area{display:block;color:#000;font-family:Arial,sans-serif}
+  .print-report{padding:24px}
+  .print-report h1{text-align:center;font-size:18px;margin:0 0 16px}
+  .print-row{display:flex;justify-content:space-between;border-bottom:1px solid #999;padding:8px 0}
+  .signs{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:60px}
+  .signs div{border-top:1px solid #000;text-align:center;padding-top:8px}
+}
+@media(max-width:1080px){
+  aside{display:none}
+  main{margin-left:0}
+  .grid{grid-template-columns:1fr}
+  .summary{grid-template-columns:1fr 1fr}
+}
+@media(max-width:720px){
+  main{padding:18px}
+  .form-grid,.three,.summary{grid-template-columns:1fr}
+  .topbar{display:block}
+  .status{justify-content:flex-start;margin-top:12px}
+  .closing-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <h2>Everest Cage Login</h2>
+    <p>Internal use only.</p>
+
+    <label>Cage ID</label>
+    <input id="loginCageId" placeholder="Enter Cage ID" autocomplete="off" />
+
+    <label style="margin-top:12px;">Password</label>
+    <input id="loginPassword" type="password" placeholder="Enter Password" autocomplete="off" />
+
+    <div class="actions">
+      <button class="primary" onclick="login()">Login</button>
+    </div>
+
+    <div id="loginMsg" class="msg"></div>
+  </div>
+</div>
+
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="logo">EV</div>
+      <div>
+        <h1>EVEREST<br>POKER ROOM</h1>
+        <small>CAGE SYSTEM</small>
+      </div>
+    </div>
+
+    <div class="login-card">
+      <div class="staff-name" id="staffDisplay">Not logged in</div>
+      <div class="role" id="roleDisplay">User Group: -<br>Current Shift: -</div>
+    </div>
+
+    <nav>
+      <a class="active" onclick="showMainView('transactionSection')">▣ New Transaction</a>
+      <a onclick="showMainView('summarySection')">▤ Shift Summary</a>
+      <a onclick="showMainView('closingSection')">◈ Close Shift</a>
+      <a onclick="showMainView('cxlSection')">! CXL Log</a>
+      <a onclick="showTransactionsView()">⌕ Transactions</a>
+    </nav>
+
+    <div class="note-box">
+      <strong>Shift Rule</strong><br>
+      DAY: 12:00–24:00<br>
+      NIGHT: 24:00–12:00<br><br>
+      <strong>Close Shift</strong><br>
+      Select the shift to close. Maximum latest 7 shifts.
+    </div>
+  </aside>
+
+  <main id="mainView">
+    <div class="topbar">
+      <div>
+        <h2>Cage Management System</h2>
+        <p>Internal Cage records · Member search optional · Close selected shift.</p>
+      </div>
+      <div class="status">
+        <div class="pill" id="datePill">Date: -</div>
+        <div class="pill" id="shiftPill">Shift: -</div>
+        <div class="pill">Default Currency: PHP</div>
+      </div>
+    </div>
+
+    <section class="card" id="summarySection">
+      <h3>Current Shift Summary <span>Auto refresh after submit</span></h3>
+      <div class="card-body">
+        <div class="summary">
+          <div class="metric"><span>Total Cash In</span><strong id="sumCashInTop">₱0</strong></div>
+          <div class="metric"><span>Total Cash Out</span><strong id="sumCashOutTop">₱0</strong></div>
+          <div class="metric"><span>Net Movement</span><strong id="netMovement">₱0</strong></div>
+          <div class="metric"><span>Transactions</span><strong id="txnCount">0</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card" id="transactionSection">
+        <h3>New Cage Transaction <span>Member search is optional</span></h3>
+        <div class="card-body">
+          <div class="form-grid">
+            <div>
+              <label>Transaction Type</label>
+              <select id="transactionType" onchange="recalculate()">
+                <option>Buy In</option>
+                <option>Non-Member Buy In</option>
+                <option>Cash Out</option>
+                <option>Non-Member Cash Out</option>
+                <option>Points Top Up</option>
+                <option>Voucher Redeem</option>
+                <option>Merchandise Purchase</option>
+                <option>Table Rake Box Deposit</option>
+                <option>Deposit to Midori Cage</option>
+                <option>Withdrawal from Midori Cage</option>
+                <option>Agent Deposit</option>
+                <option>Agent Withdrawal</option>
+              </select>
+              <div class="hint" id="directionHint">Cash In</div>
+            </div>
+
+            <div>
+              <label>Transaction ID</label>
+              <input id="transactionIdPreview" value="Auto generated after Submit" readonly />
+            </div>
+
+            <div class="full member-wrap">
+              <label>Member Search Optional</label>
+              <input
+                id="memberSearch"
+                placeholder="Member Code / Name / Nick Name / Passport / Phone"
+                autocomplete="off"
+                oninput="debounceMemberSearch()"
+                onkeydown="if(event.key==='Enter'){lookupMemberBySearch();}"
+              />
+              <input id="memberId" type="hidden" />
+              <div id="memberDropdown" class="member-dropdown"></div>
+              <div class="hint">
+                Type 2+ characters to show matching members. Leave blank for cage-only or non-member transactions.
+              </div>
+            </div>
+
+            <div><label>Player Name</label><input id="playerName" readonly /></div>
+            <div><label>Status</label><input id="memberStatus" readonly /></div>
+            <div><label>Nationality</label><input id="nationality" readonly /></div>
+          </div>
+
+          <div class="form-grid three" style="margin-top:14px;">
+            <div>
+              <label>Currency</label>
+              <select id="currency" onchange="handleCurrencyChange()">
+                <option selected>PHP</option>
+                <option>TWD</option>
+                <option>HKD</option>
+                <option>KRW</option>
+                <option>JPY</option>
+                <option>USD</option>
+              </select>
+            </div>
+            <div><label>Exchange Rate</label><input id="exchangeRate" value="1" oninput="recalculate()" /></div>
+            <div><label>Amount</label><input id="amount" placeholder="0.00" oninput="recalculate()" /></div>
+            <div><label>Amount PHP</label><input id="amountPHP" value="₱0" readonly /></div>
+            <div>
+              <label>Payment Method</label>
+              <select id="paymentMethod">
+                <option selected>Cash</option>
+                <option>Promo Voucher</option>
+                <option>Other - Remark</option>
+              </select>
+            </div>
+            <div><label>Reference No.</label><input id="referenceNo" placeholder="Voucher ID / Receipt No. / NM-0604-001" /></div>
+            <div class="full"><label>Remark</label><textarea id="remark" placeholder="Optional"></textarea></div>
+          </div>
+
+          <div class="summary" style="grid-template-columns:1fr 1fr;margin-top:14px;margin-bottom:0;">
+            <div class="metric"><span>Cash In</span><strong id="cashInPreview">₱0</strong></div>
+            <div class="metric"><span>Cash Out</span><strong id="cashOutPreview">₱0</strong></div>
+          </div>
+
+          <div class="actions">
+            <button class="secondary" onclick="clearTransaction()">Clear</button>
+            <button class="primary" onclick="submitTransaction()">Submit</button>
+          </div>
+
+          <div id="txnMsg" class="msg"></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="card" id="closingSection">
+          <h3>Close Shift <span>Select one of latest 7 shifts</span></h3>
+          <div class="card-body closing">
+            <div class="closing-row">
+              <span>Current Shift</span>
+              <strong id="closingShift">-</strong>
+            </div>
+
+            <div class="closing-row">
+              <span>Shift to Close</span>
+              <select id="closeShiftSelector" onchange="handleCloseShiftChange()"></select>
+            </div>
+
+            <div class="hint">
+              Select the shift you want to close. Maximum latest 7 shifts.
+            </div>
+
+            <div class="closing-row">
+              <span>Opening Balance</span>
+              <input id="openingBalance" value="0" oninput="refreshSelectedClosing()" />
+            </div>
+
+            <div class="closing-row">
+              <span>Total Cash In</span>
+              <strong id="sumCashIn">₱0</strong>
+            </div>
+
+            <div class="closing-row">
+              <span>Total Cash Out</span>
+              <strong id="sumCashOut">₱0</strong>
+            </div>
+
+            <div class="closing-row">
+              <span>Expected Balance</span>
+              <strong id="expectedBalance">₱0</strong>
+            </div>
+
+            <div class="closing-row">
+              <span>Actual Count</span>
+              <input id="actualBalance" value="0" oninput="refreshSelectedClosing()" />
+            </div>
+
+            <div class="closing-row">
+              <span>Variance</span>
+              <strong id="variance">₱0</strong>
+            </div>
+
+            <div class="form-grid">
+              <div><label>Verified By</label><input id="verifiedBy" placeholder="Supervisor / Cage ID" /></div>
+              <div><label>Closing Remark</label><input id="closingRemark" placeholder="Optional" /></div>
+            </div>
+
+            <div class="notice">
+              Close Shift generates a printable report based on the selected Business Date + Shift, not only the current time.
+            </div>
+
+            <div class="actions">
+              <button class="primary" onclick="closeShift()">Close Selected Shift & Print</button>
+            </div>
+
+            <div id="closeMsg" class="msg"></div>
+          </div>
+        </div>
+
+        <div class="card" id="cxlSection">
+          <h3>CXL Log <span>Reverse entry</span></h3>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="full">
+                <label>Original Transaction ID</label>
+                <input id="cxlOriginalId" placeholder="CAGE-YYYYMMDD-SHIFT-0001" />
+              </div>
+              <div class="full">
+                <label>Reason</label>
+                <textarea id="cxlReason" placeholder="Reason for correction / cancellation"></textarea>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="danger" onclick="logCXL()">Submit CXL Log</button>
+            </div>
+
+            <div id="cxlMsg" class="msg"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <main id="transactionsView" class="hidden">
+    <div class="topbar">
+      <div>
+        <h2>Transactions</h2>
+        <p>Latest 100 Cage transaction records.</p>
+      </div>
+      <div class="actions">
+        <button class="secondary" onclick="showMainView()">Back</button>
+        <button class="primary" onclick="loadTransactions()">Refresh</button>
+      </div>
+    </div>
+
+    <section class="card">
+      <h3>Latest Transactions <span>Read only</span></h3>
+      <div class="card-body" style="overflow:auto;">
+        <table class="txn-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Transaction ID</th>
+              <th>Business Date</th>
+              <th>Shift</th>
+              <th>Type</th>
+              <th>Direction</th>
+              <th>Member</th>
+              <th>Player</th>
+              <th>Amount PHP</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Reference</th>
+            </tr>
+          </thead>
+          <tbody id="transactionsBody">
+            <tr><td colspan="12">No records loaded.</td></tr>
+          </tbody>
+        </table>
+        <div id="transactionsMsg" class="msg"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="print-area">
+  <div class="print-report" id="printReport"></div>
+</div>
+
+<script>
+const CONFIG = {
+  API_URL: "https://script.google.com/macros/s/AKfycby9N-3K9Lppr1BFg_hNQTdv2etzrJ2jOBWdZBMdX1XomEDEdHHPGBZrdg4BX6HXLib80A/exec",
+  APP_TOKEN: "EVEREST_CAGE_2026_PRIVATE"
+};
+
+const TYPE_DIRECTION = {
+  "Buy In": "IN",
+  "Non-Member Buy In": "IN",
+  "Points Top Up": "IN",
+  "Merchandise Purchase": "IN",
+  "Table Rake Box Deposit": "IN",
+  "Withdrawal from Midori Cage": "IN",
+  "Agent Deposit": "IN",
+
+  "Cash Out": "OUT",
+  "Non-Member Cash Out": "OUT",
+  "Voucher Redeem": "OUT",
+  "Deposit to Midori Cage": "OUT",
+  "Agent Withdrawal": "OUT"
+};
+
+const state = {
+  staff: null,
+  password: "",
+  shift: null,
+  latestSummary: {
+    totalCashIn: 0,
+    totalCashOut: 0,
+    netMovement: 0,
+    transactionCount: 0
+  },
+  closeShiftOptions: [],
+  selectedCloseShift: null,
+  selectedCloseSummary: {
+    totalCashIn: 0,
+    totalCashOut: 0,
+    netMovement: 0,
+    transactionCount: 0
+  }
+};
+
+let memberSearchTimer = null;
+
+function money(n) {
+  return "₱" + (Number(n || 0)).toLocaleString("en-US", { maximumFractionDigits: 2 });
+}
+
+function val(id) {
+  return document.getElementById(id).value;
+}
+
+function setText(id, v) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = v;
+}
+
+function setValue(id, v) {
+  const el = document.getElementById(id);
+  if (el) el.value = v;
+}
+
+function setMsg(id, text, ok = true) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = "msg " + (ok ? "ok" : "err");
+  el.textContent = text;
+}
+
+function clearMsg(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = "msg";
+  el.textContent = "";
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function getMemberCode() {
+  const selected = document.getElementById("memberId").value.trim();
+
+  if (selected) {
+    return selected;
+  }
+
+  const keyword = document.getElementById("memberSearch").value.trim().toUpperCase();
+
+  if (!keyword) {
+    return "";
+  }
+
+  const digits = keyword.replace(/^EPR-?/, "").replace(/[^0-9]/g, "");
+
+  if (digits) {
+    return "EPR-" + digits.padStart(5, "0");
+  }
+
+  return "";
+}
+
+function api(action, params = {}) {
+  return new Promise((resolve, reject) => {
+    const cb = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const url = new URL(CONFIG.API_URL);
+
+    url.searchParams.set("callback", cb);
+    url.searchParams.set("token", CONFIG.APP_TOKEN);
+    url.searchParams.set("action", action);
+
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null) {
+        url.searchParams.set(k, String(v));
+      }
+    });
+
+    const script = document.createElement("script");
+
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("API timeout."));
+    }, 15000);
+
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cb];
+      script.remove();
+    }
+
+    window[cb] = data => {
+      cleanup();
+      data.ok ? resolve(data) : reject(new Error(data.error || "API error."));
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("API connection failed."));
+    };
+
+    script.src = url.toString();
+    document.body.appendChild(script);
+  });
+}
+
+function auth(extra = {}) {
+  if (!state.staff) {
+    throw new Error("Please login first.");
+  }
+
+  return Object.assign({
+    cageId: state.staff.cageId,
+    password: state.password
+  }, extra);
+}
+
+async function login() {
+  clearMsg("loginMsg");
+
+  try {
+    const cageId = val("loginCageId").trim().toUpperCase();
+    const password = val("loginPassword");
+
+    const res = await api("login", {
+      cageId,
+      password
+    });
+
+    state.staff = res.staff;
+    state.password = password;
+    state.shift = res.shift;
+
+    document.getElementById("loginScreen").style.display = "none";
+
+    setText("staffDisplay", `${res.staff.cageId} — ${res.staff.name}`);
+    document.getElementById("roleDisplay").innerHTML = `User Group: ${res.staff.roleName} ${res.staff.userGroup}<br>Current Shift: ${res.shift.display}`;
+
+    setText("datePill", "Date: " + res.shift.businessDate);
+    setText("shiftPill", "Shift: " + res.shift.display);
+    setText("closingShift", res.shift.display);
+
+    await refreshShiftSummary();
+    await loadCloseShiftOptions();
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("view") === "transactions") {
+      showTransactionsView();
+    }
+
+  } catch (err) {
+    setMsg("loginMsg", err.message, false);
+  }
+}
+
+function handleCurrencyChange() {
+  if (val("currency") === "PHP") {
+    setValue("exchangeRate", "1");
+  }
+
+  recalculate();
+}
+
+function recalculate() {
+  const type = val("transactionType");
+  const direction = TYPE_DIRECTION[type] || "IN";
+  const amount = Number(String(val("amount")).replace(/,/g, "")) || 0;
+  const rate = Number(String(val("exchangeRate")).replace(/,/g, "")) || 0;
+  const php = amount * rate;
+
+  setValue("amountPHP", money(php));
+  setText("cashInPreview", direction === "IN" ? money(php) : money(0));
+  setText("cashOutPreview", direction === "OUT" ? money(php) : money(0));
+  setText("directionHint", direction === "IN" ? "Cash In" : "Cash Out");
+}
+
+async function submitTransaction() {
+  clearMsg("txnMsg");
+
+  try {
+    const type = val("transactionType");
+    const memberId = getMemberCode();
+    const referenceNo = val("referenceNo").trim();
+    const remark = val("remark").trim();
+
+    if ((type === "Non-Member Buy In" || type === "Non-Member Cash Out") && !referenceNo && !remark) {
+      setMsg("txnMsg", "Reference No. or Remark is required for Non-Member transactions.", false);
+      return;
+    }
+
+    const res = await api("submitTransaction", auth({
+      transactionType: type,
+      memberId,
+      currency: val("currency"),
+      exchangeRate: val("exchangeRate"),
+      amount: val("amount"),
+      paymentMethod: val("paymentMethod"),
+      referenceNo,
+      remark
+    }));
+
+    setValue("transactionIdPreview", res.transactionId);
+    setMsg("txnMsg", `Submitted: ${res.transactionId}`, true);
+
+    await refreshShiftSummary();
+    await loadCloseShiftOptions();
+
+  } catch (err) {
+    setMsg("txnMsg", err.message, false);
+  }
+}
+
+async function refreshShiftSummary() {
+  if (!state.staff) return;
+
+  try {
+    const res = await api("getShiftSummary", auth({}));
+
+    state.latestSummary = res.summary || {
+      totalCashIn: 0,
+      totalCashOut: 0,
+      netMovement: 0,
+      transactionCount: 0
+    };
+
+    setText("sumCashInTop", money(state.latestSummary.totalCashIn));
+    setText("sumCashOutTop", money(state.latestSummary.totalCashOut));
+    setText("netMovement", money(state.latestSummary.netMovement));
+    setText("txnCount", String(state.latestSummary.transactionCount || 0));
+
+  } catch (err) {
+    setMsg("closeMsg", "Summary: " + err.message, false);
+  }
+}
+
+async function loadCloseShiftOptions() {
+  try {
+    const res = await api("getCloseShiftOptions", auth({}));
+
+    state.closeShiftOptions = res.options || [];
+
+    const selector = document.getElementById("closeShiftSelector");
+
+    if (!selector) return;
+
+    selector.innerHTML = "";
+
+    state.closeShiftOptions.forEach((item, index) => {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = item.label || item.display;
+      selector.appendChild(option);
+    });
+
+    if (state.closeShiftOptions.length > 1) {
+      selector.value = "1";
+    } else {
+      selector.value = "0";
+    }
+
+    await handleCloseShiftChange();
+
+  } catch (err) {
+    setMsg("closeMsg", "Failed to load close shift options: " + err.message, false);
+  }
+}
+
+async function handleCloseShiftChange() {
+  const selector = document.getElementById("closeShiftSelector");
+
+  if (!selector || state.closeShiftOptions.length === 0) return;
+
+  const index = Number(selector.value || 0);
+  state.selectedCloseShift = state.closeShiftOptions[index];
+
+  await loadSelectedShiftSummary();
+}
+
+async function loadSelectedShiftSummary() {
+  if (!state.selectedCloseShift) return;
+
+  try {
+    const res = await api("getShiftSummary", auth({
+      businessDate: state.selectedCloseShift.businessDate,
+      shiftName: state.selectedCloseShift.shift
+    }));
+
+    state.selectedCloseSummary = res.summary || {
+      totalCashIn: 0,
+      totalCashOut: 0,
+      netMovement: 0,
+      transactionCount: 0
+    };
+
+    refreshSelectedClosing();
+
+  } catch (err) {
+    setMsg("closeMsg", "Failed to load selected shift summary: " + err.message, false);
+  }
+}
+
+function refreshSelectedClosing() {
+  const s = state.selectedCloseSummary || {};
+  const opening = Number(String(val("openingBalance")).replace(/,/g, "")) || 0;
+  const actual = Number(String(val("actualBalance")).replace(/,/g, "")) || 0;
+  const totalCashIn = Number(s.totalCashIn || 0);
+  const totalCashOut = Number(s.totalCashOut || 0);
+  const expected = opening + totalCashIn - totalCashOut;
+
+  setText("sumCashIn", money(totalCashIn));
+  setText("sumCashOut", money(totalCashOut));
+  setText("expectedBalance", money(expected));
+  setText("variance", money(actual - expected));
+}
+
+async function closeShift() {
+  clearMsg("closeMsg");
+
+  if (!state.selectedCloseShift) {
+    setMsg("closeMsg", "Please select the shift to close.", false);
+    return;
+  }
+
+  const verifiedBy = val("verifiedBy").trim();
+
+  if (!verifiedBy) {
+    setMsg("closeMsg", "Verified By is required.", false);
+    return;
+  }
+
+  try {
+    const res = await api("closeShift", auth({
+      businessDate: state.selectedCloseShift.businessDate,
+      shiftName: state.selectedCloseShift.shift,
+      openingBalance: val("openingBalance"),
+      actualBalance: val("actualBalance"),
+      verifiedBy,
+      remark: val("closingRemark")
+    }));
+
+    buildPrintReport(res.report);
+    setMsg("closeMsg", "Closed: " + res.report.reportNo, true);
+    window.print();
+
+    await refreshShiftSummary();
+    await loadCloseShiftOptions();
+
+  } catch (err) {
+    setMsg("closeMsg", err.message, false);
+  }
+}
+
+async function logCXL() {
+  clearMsg("cxlMsg");
+
+  try {
+    const res = await api("logCXL", auth({
+      originalTransactionId: val("cxlOriginalId"),
+      reason: val("cxlReason")
+    }));
+
+    setMsg("cxlMsg", "CXL logged: " + res.cxlId, true);
+
+    await refreshShiftSummary();
+    await loadCloseShiftOptions();
+
+  } catch (err) {
+    setMsg("cxlMsg", err.message, false);
+  }
+}
+
+function buildPrintReport(r) {
+  document.getElementById("printReport").innerHTML = `
+    <h1>EVEREST POKER ROOM<br>CAGE SHIFT CLOSING REPORT</h1>
+    ${printRow("Report No.", r.reportNo)}
+    ${printRow("Business Date", r.businessDate)}
+    ${printRow("Shift", r.shift)}
+    ${printRow("Opening Balance", money(r.openingBalance))}
+    ${printRow("Total Cash In", money(r.totalCashIn))}
+    ${printRow("Total Cash Out", money(r.totalCashOut))}
+    ${printRow("Expected Balance", money(r.expectedBalance))}
+    ${printRow("Actual Balance", money(r.actualBalance))}
+    ${printRow("Variance", money(r.variance))}
+    ${printRow("Transaction Count", r.transactionCount)}
+    ${printRow("Cash Payment Total", money(r.cashPaymentTotal))}
+    ${printRow("Promo Voucher Total", money(r.promoVoucherTotal))}
+    ${printRow("Other Payment Total", money(r.otherPaymentTotal))}
+    ${printRow("Prepared By", r.preparedBy)}
+    ${printRow("Verified By", r.verifiedBy)}
+    ${printRow("Remark", r.remark || "")}
+    <div class="signs">
+      <div>Prepared by</div>
+      <div>Verified by</div>
+    </div>
+  `;
+}
+
+function printRow(a, b) {
+  return `<div class="print-row"><strong>${escapeHtml(a)}</strong><span>${escapeHtml(b)}</span></div>`;
+}
+
+function clearTransaction() {
+  [
+    "memberSearch",
+    "memberId",
+    "playerName",
+    "memberStatus",
+    "nationality",
+    "amount",
+    "referenceNo",
+    "remark"
+  ].forEach(id => setValue(id, ""));
+
+  setValue("currency", "PHP");
+  setValue("exchangeRate", "1");
+  setValue("transactionIdPreview", "Auto generated after Submit");
+
+  const dropdown = document.getElementById("memberDropdown");
+  if (dropdown) {
+    dropdown.style.display = "none";
+    dropdown.innerHTML = "";
+  }
+
+  recalculate();
+  clearMsg("txnMsg");
+}
+
+function showMainView(sectionId) {
+  document.getElementById("mainView").classList.remove("hidden");
+  document.getElementById("transactionsView").classList.add("hidden");
+
+  const url = new URL(window.location.href);
+  url.searchParams.delete("view");
+  window.history.replaceState({}, "", url.toString());
+
+  if (sectionId) {
+    const el = document.getElementById(sectionId);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function showTransactionsView() {
+  document.getElementById("mainView").classList.add("hidden");
+  document.getElementById("transactionsView").classList.remove("hidden");
+
+  const url = new URL(window.location.href);
+  url.searchParams.set("view", "transactions");
+  window.history.replaceState({}, "", url.toString());
+
+  loadTransactions();
+}
+
+async function loadTransactions() {
+  clearMsg("transactionsMsg");
+
+  try {
+    const res = await api("getTransactions", auth({}));
+    const transactions = res.transactions || [];
+    const tbody = document.getElementById("transactionsBody");
+
+    tbody.innerHTML = "";
+
+    if (transactions.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="12">No transaction records.</td></tr>`;
+      return;
+    }
+
+    transactions.forEach(t => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(t.timestamp)}</td>
+        <td>${escapeHtml(t.transactionId)}</td>
+        <td>${escapeHtml(t.businessDate)}</td>
+        <td>${escapeHtml(t.shift)}</td>
+        <td>${escapeHtml(t.transactionType)}</td>
+        <td>${escapeHtml(t.direction)}</td>
+        <td>${escapeHtml(t.memberCode)}</td>
+        <td>${escapeHtml(t.playerName)}</td>
+        <td>${money(t.amountPHP)}</td>
+        <td>${escapeHtml(t.paymentMethod)}</td>
+        <td>${escapeHtml(t.recordStatus)}</td>
+        <td>${escapeHtml(t.referenceNo)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+  } catch (err) {
+    setMsg("transactionsMsg", err.message, false);
+  }
+}
+
+function debounceMemberSearch() {
+  clearTimeout(memberSearchTimer);
+
+  document.getElementById("memberId").value = "";
+  setValue("playerName", "");
+  setValue("memberStatus", "");
+  setValue("nationality", "");
+
+  memberSearchTimer = setTimeout(() => {
+    searchMemberOptions();
+  }, 300);
+}
+
+async function searchMemberOptions() {
+  const keyword = document.getElementById("memberSearch").value.trim();
+  const dropdown = document.getElementById("memberDropdown");
+
+  if (!keyword || keyword.length < 2) {
+    dropdown.style.display = "none";
+    dropdown.innerHTML = "";
+    return;
+  }
+
+  try {
+    const res = await api("searchMembers", auth({
+      keyword
+    }));
+
+    dropdown.innerHTML = "";
+
+    if (!res.members || res.members.length === 0) {
+      dropdown.innerHTML = `
+        <div class="member-item">
+          <small>No matching member found.</small>
+        </div>
+      `;
+      dropdown.style.display = "block";
+      return;
+    }
+
+    res.members.forEach(member => {
+      const item = document.createElement("div");
+      item.className = "member-item";
+
+      item.innerHTML = `
+        <strong>${escapeHtml(member.memberCode)} — ${escapeHtml(member.playerName || "-")}</strong>
+        <small>
+          ${escapeHtml(member.status || "-")} / ${escapeHtml(member.nationality || "-")}
+          ${member.nickName ? " / Nick: " + escapeHtml(member.nickName) : ""}
+          ${member.phone ? " / Phone: " + escapeHtml(member.phone) : ""}
+        </small>
+      `;
+
+      item.onclick = () => {
+        selectMemberOption(member);
+      };
+
+      dropdown.appendChild(item);
+    });
+
+    dropdown.style.display = "block";
+
+  } catch (err) {
+    dropdown.innerHTML = `
+      <div class="member-item">
+        <small>Search failed: ${escapeHtml(err.message)}</small>
+      </div>
+    `;
+    dropdown.style.display = "block";
+  }
+}
+
+function selectMemberOption(member) {
+  document.getElementById("memberId").value = member.memberCode || "";
+  document.getElementById("memberSearch").value = `${member.memberCode || ""} — ${member.playerName || ""}`;
+
+  setValue("playerName", member.playerName || "");
+  setValue("memberStatus", member.status || "");
+  setValue("nationality", member.nationality || "");
+
+  const dropdown = document.getElementById("memberDropdown");
+  dropdown.style.display = "none";
+  dropdown.innerHTML = "";
+
+  setMsg("txnMsg", "Member selected: " + (member.memberCode || ""), true);
+}
+
+async function lookupMemberBySearch() {
+  const memberCode = getMemberCode();
+
+  if (!memberCode) {
+    setMsg("txnMsg", "Member code is blank. This is OK for cage-only transactions.", true);
+    return;
+  }
+
+  setMsg("txnMsg", "Searching member: " + memberCode + "...", true);
+
+  try {
+    const res = await api("getMember", auth({
+      memberId: memberCode
+    }));
+
+    const member = res.member;
+
+    document.getElementById("memberId").value = member.memberCode || "";
+    document.getElementById("memberSearch").value = `${member.memberCode || ""} — ${member.playerName || ""}`;
+
+    setValue("playerName", member.playerName || "");
+    setValue("memberStatus", member.status || "");
+    setValue("nationality", member.nationality || "");
+
+    setMsg("txnMsg", "Member loaded: " + memberCode, true);
+
+  } catch (err) {
+    setValue("playerName", "");
+    setValue("memberStatus", "");
+    setValue("nationality", "");
+    setMsg("txnMsg", "Member lookup failed: " + err.message, false);
+  }
+}
+
+document.addEventListener("click", function(event) {
+  const dropdown = document.getElementById("memberDropdown");
+  const input = document.getElementById("memberSearch");
+
+  if (!dropdown || !input) return;
+
+  if (!dropdown.contains(event.target) && event.target !== input) {
+    dropdown.style.display = "none";
+  }
+});
+
+document.getElementById("loginPassword").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    login();
+  }
+});
+
+document.getElementById("loginCageId").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    document.getElementById("loginPassword").focus();
+  }
+});
+
+recalculate();
+</script>
+</body>
+</html>
