@@ -270,7 +270,7 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
     <nav>
       <a class="active" onclick="scrollToSection('memberSection')">▣ Member Lookup</a>
       <a onclick="scrollToSection('pointsSection')">＋ Points Operation</a>
-      <a onclick="scrollToSection('editSection')">✎ Member Update</a>
+      <a onclick="scrollToSection('editSection')">✎ Member Management</a>
       <a onclick="scrollToSection('historySection')">⌕ Transaction History</a>
     </nav>
 
@@ -285,7 +285,7 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
     <div class="topbar">
       <div>
         <h2>Everest Staff Admin</h2>
-        <p>Member search · points top-up / redeem · member updates.</p>
+        <p>Member search · points top-up / redeem · member management.</p>
       </div>
       <div class="status">
         <div class="pill">Member API</div>
@@ -312,7 +312,8 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
           </div>
 
           <div><label>Member Code</label><input id="memberCode" readonly /></div>
-          <div><label>Status</label><input id="memberStatus" /></div>
+          <div><label>Status</label><input id="memberStatus" readonly /></div>
+          <div><label>Card Tier</label><input id="cardTierDisplay" readonly /></div>
           <div><label>Full Name</label><input id="fullName" /></div>
           <div><label>Nick Name</label><input id="nickName" /></div>
           <div><label>Nationality</label><input id="nationality" /></div>
@@ -372,11 +373,11 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
       </section>
 
       <section class="card" id="editSection">
-        <h3>Member Update <span>Save basic member profile</span></h3>
+        <h3>Member Management <span>Verify / Card Tier / PIN / Remark</span></h3>
         <div class="card-body">
           <div class="form-grid">
             <div>
-              <label>Status</label>
+              <label>Verification Status</label>
               <select id="editStatus">
                 <option>Pending</option>
                 <option>ID VERIFIED</option>
@@ -386,8 +387,22 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
               </select>
             </div>
             <div>
+              <label>Card Tier</label>
+              <select id="editCardTier">
+                <option>L1 Silver</option>
+                <option>L2 Gold</option>
+                <option>L3 Diamond</option>
+                <option>O1 Sky Blue</option>
+              </select>
+            </div>
+            <div>
               <label>Reset PIN</label>
               <input id="newPin" placeholder="0000" maxlength="8" />
+              <div class="hint">Leave blank to reset to 0000.</div>
+            </div>
+            <div>
+              <label>Management Action</label>
+              <input value="Verify / Tier / PIN control" readonly />
             </div>
             <div class="full">
               <label>Remark</label>
@@ -395,9 +410,13 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
             </div>
           </div>
 
+          <div class="notice">
+            Verification Status, Card Tier, Reset PIN and Remark are managed together here.
+          </div>
+
           <div class="actions">
             <button class="secondary" onclick="resetPin()">Reset PIN</button>
-            <button class="primary" onclick="saveMember()">Save Member Update</button>
+            <button class="primary" onclick="saveMember()">Save Member Management</button>
           </div>
 
           <div id="editMsg" class="msg"></div>
@@ -627,7 +646,7 @@ async function searchMemberOptions() {
       item.innerHTML = `
         <strong>${escapeHtml(member.memberCode)} — ${escapeHtml(member.fullName || member.playerName || "-")}</strong>
         <small>
-          ${escapeHtml(member.status || "-")} / ${escapeHtml(member.nationality || "-")}
+          ${escapeHtml(member.status || "-")} / ${escapeHtml(member.cardTier || "-")} / ${escapeHtml(member.nationality || "-")}
           ${member.nickName ? " / Nick: " + escapeHtml(member.nickName) : ""}
           ${member.phone ? " / Phone: " + escapeHtml(member.phone) : ""}
         </small>
@@ -664,6 +683,8 @@ function fillMember(member) {
   setValue("memberCode", member.memberCode || "");
   setValue("memberStatus", member.status || "");
   setValue("editStatus", member.status || "Active");
+  setValue("cardTierDisplay", member.cardTier || "");
+  setValue("editCardTier", member.cardTier || "L1 Silver");
   setValue("fullName", member.fullName || member.playerName || "");
   setValue("nickName", member.nickName || "");
   setValue("nationality", member.nationality || "");
@@ -711,6 +732,7 @@ function clearMember() {
     "selectedMemberCode",
     "memberCode",
     "memberStatus",
+    "cardTierDisplay",
     "fullName",
     "nickName",
     "nationality",
@@ -727,6 +749,7 @@ function clearMember() {
   ].forEach(id => setValue(id, ""));
 
   setValue("editStatus", "Active");
+  setValue("editCardTier", "L1 Silver");
   document.getElementById("historyBody").innerHTML = `<tr><td colspan="11">No records loaded.</td></tr>`;
   clearMsg("memberMsg");
   clearMsg("pointsMsg");
@@ -778,6 +801,7 @@ async function saveMember() {
     const res = await api("updateMember", auth({
       memberCode,
       status: val("editStatus"),
+      cardTier: val("editCardTier"),
       fullName: val("fullName"),
       nickName: val("nickName"),
       nationality: val("nationality"),
