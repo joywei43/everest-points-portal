@@ -271,6 +271,7 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
       <a class="active" onclick="scrollToSection('memberSection')">▣ Member Lookup</a>
       <a onclick="scrollToSection('pointsSection')">＋ Points Operation</a>
       <a onclick="scrollToSection('editSection')">✎ Member Management</a>
+      <a onclick="scrollToSection('pinSection')">⌘ PIN Control</a>
       <a onclick="scrollToSection('historySection')">⌕ Transaction History</a>
     </nav>
 
@@ -373,7 +374,7 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
       </section>
 
       <section class="card" id="editSection">
-        <h3>Member Management <span>Verify / Card Tier / PIN / Remark</span></h3>
+        <h3>Member Management <span>Verify / Card Tier / Remark</span></h3>
         <div class="card-body">
           <div class="form-grid">
             <div>
@@ -395,15 +396,6 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
                 <option>O1 Sky Blue</option>
               </select>
             </div>
-            <div>
-              <label>Reset PIN</label>
-              <input id="newPin" placeholder="0000" maxlength="8" />
-              <div class="hint">Leave blank to reset to 0000.</div>
-            </div>
-            <div>
-              <label>Management Action</label>
-              <input value="Verify / Tier / PIN control" readonly />
-            </div>
             <div class="full">
               <label>Remark</label>
               <textarea id="editRemark" placeholder="Optional remark"></textarea>
@@ -411,15 +403,41 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
           </div>
 
           <div class="notice">
-            Verification Status, Card Tier, Reset PIN and Remark are managed together here.
+            This section only updates Verification Status, Card Tier and Remark. It will not reset the member PIN.
           </div>
 
           <div class="actions">
-            <button class="secondary" onclick="resetPin()">Reset PIN</button>
             <button class="primary" onclick="saveMember()">Save Member Management</button>
           </div>
 
           <div id="editMsg" class="msg"></div>
+        </div>
+      </section>
+
+      <section class="card" id="pinSection">
+        <h3>PIN Control <span>Separate action</span></h3>
+        <div class="card-body">
+          <div class="form-grid">
+            <div>
+              <label>New PIN</label>
+              <input id="newPin" placeholder="0000" maxlength="8" />
+              <div class="hint">Leave blank to reset to 0000.</div>
+            </div>
+            <div>
+              <label>Action</label>
+              <input value="Reset selected member PIN only" readonly />
+            </div>
+          </div>
+
+          <div class="notice">
+            This button only resets the selected member's PIN. It will not change Verification Status, Card Tier or Remark.
+          </div>
+
+          <div class="actions">
+            <button class="secondary" onclick="resetPin()">Reset PIN Only</button>
+          </div>
+
+          <div id="pinMsg" class="msg"></div>
         </div>
       </section>
     </div>
@@ -754,6 +772,7 @@ function clearMember() {
   clearMsg("memberMsg");
   clearMsg("pointsMsg");
   clearMsg("editMsg");
+  clearMsg("pinMsg");
 }
 
 async function submitPoints() {
@@ -823,13 +842,13 @@ async function saveMember() {
 }
 
 async function resetPin() {
-  clearMsg("editMsg");
+  clearMsg("pinMsg");
 
   try {
     const memberCode = val("memberCode") || val("selectedMemberCode");
 
     if (!memberCode) {
-      setMsg("editMsg", "Please select a member first.", false);
+      setMsg("pinMsg", "Please select a member first.", false);
       return;
     }
 
@@ -840,10 +859,10 @@ async function resetPin() {
       newPin: pin
     }));
 
-    setMsg("editMsg", "PIN reset successfully: " + res.pin, true);
+    setMsg("pinMsg", "PIN reset successfully: " + res.pin, true);
 
   } catch (err) {
-    setMsg("editMsg", err.message, false);
+    setMsg("pinMsg", err.message, false);
   }
 }
 
