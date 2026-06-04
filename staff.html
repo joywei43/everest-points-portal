@@ -530,6 +530,23 @@ function numberText(n) {
   return (Number(n || 0)).toLocaleString("en-US", { maximumFractionDigits: 2 });
 }
 
+function dateOnly(value) {
+  if (!value) return "";
+  const raw = String(value);
+  const match = raw.match(/^\d{4}-\d{2}-\d{2}/);
+  if (match) return match[0];
+
+  const d = new Date(value);
+  if (!isNaN(d.getTime())) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  return raw;
+}
+
 function api(action, params = {}) {
   return new Promise((resolve, reject) => {
     const cb = "jsonp_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
@@ -706,7 +723,7 @@ function fillMember(member) {
   setValue("fullName", member.fullName || member.playerName || "");
   setValue("nickName", member.nickName || "");
   setValue("nationality", member.nationality || "");
-  setValue("birthday", member.birthday || "");
+  setValue("birthday", dateOnly(member.birthday));
   setValue("passportId", member.passportId || "");
   setValue("email", member.email || "");
   setValue("phone", member.phone || "");
