@@ -390,10 +390,10 @@ button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:poin
             <div>
               <label>Card Tier</label>
               <select id="editCardTier">
-                <option>L1 Silver</option>
-                <option>L2 Gold</option>
-                <option>L3 Diamond</option>
-                <option>O1 Sky Blue</option>
+                <option>Silver</option>
+                <option>Gold</option>
+                <option>Diamond</option>
+                <option>Sky Blue</option>
               </select>
             </div>
             <div class="full">
@@ -719,7 +719,7 @@ function fillMember(member) {
   setValue("memberStatus", member.status || "");
   setValue("editStatus", member.status || "Active");
   setValue("cardTierDisplay", member.cardTier || "");
-  setValue("editCardTier", member.cardTier || "L1 Silver");
+  setValue("editCardTier", member.cardTier || "Silver");
   setValue("fullName", member.fullName || member.playerName || "");
   setValue("nickName", member.nickName || "");
   setValue("nationality", member.nationality || "");
@@ -784,7 +784,7 @@ function clearMember() {
   ].forEach(id => setValue(id, ""));
 
   setValue("editStatus", "Active");
-  setValue("editCardTier", "L1 Silver");
+  setValue("editCardTier", "Silver");
   document.getElementById("historyBody").innerHTML = `<tr><td colspan="11">No records loaded.</td></tr>`;
   clearMsg("memberMsg");
   clearMsg("pointsMsg");
