@@ -111,18 +111,20 @@ input,select,textarea{width:100%;background:var(--input);border:1px solid rgba(2
             <div class="form-grid">
               <div>
                 <label>Transaction Type</label>
-                <select id="transactionType" onchange="recalculate()">
-                  <option>Buy In</option>
-                  <option>Return Chip</option>
-                  <option>Points Top Up</option>
-                  <option>Voucher Redeem</option>
-                  <option>Merchandise Purchase</option>
-                  <option>Table Rake Box Deposit</option>
-                  <option>Deposit to Midori Cage</option>
-                  <option>Withdrawal from Midori Cage</option>
-                  <option>Agent Deposit</option>
-                  <option>Agent Withdrawal</option>
-                </select>
+<select id="transactionType" onchange="recalculate()">
+  <option>Buy In</option>
+  <option>Non-Member Buy In</option>
+  <option>Cash Out</option>
+  <option>Non-Member Cash Out</option>
+  <option>Points Top Up</option>
+  <option>Voucher Redeem</option>
+  <option>Merchandise Purchase</option>
+  <option>Table Rake Box Deposit</option>
+  <option>Deposit to Midori Cage</option>
+  <option>Withdrawal from Midori Cage</option>
+  <option>Agent Deposit</option>
+  <option>Agent Withdrawal</option>
+</select>
                 <div class="hint" id="directionHint">Cash In</div>
               </div>
 
@@ -279,12 +281,15 @@ const CONFIG = {
 
 const TYPE_DIRECTION = {
   "Buy In": "IN",
+  "Non-Member Buy In": "IN",
   "Points Top Up": "IN",
   "Merchandise Purchase": "IN",
   "Table Rake Box Deposit": "IN",
   "Withdrawal from Midori Cage": "IN",
   "Agent Deposit": "IN",
-  "Return Chip": "OUT",
+
+  "Cash Out": "OUT",
+  "Non-Member Cash Out": "OUT",
   "Voucher Redeem": "OUT",
   "Deposit to Midori Cage": "OUT",
   "Agent Withdrawal": "OUT"
